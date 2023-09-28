@@ -82,6 +82,5 @@ class Workspace
   {
     zoom -= change*0.1;
     zoom = constrain(zoom, 0.3, 5);
-    print(zoom + "\n");
   }
 }

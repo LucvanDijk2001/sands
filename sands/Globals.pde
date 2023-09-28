@@ -7,6 +7,20 @@ class Globals
   float pnmx;
   float pnmy;
 
+  //hud colors
+  color HUDMenuColor = color(140,10,70);
+  color HUDMenuBarColor = color(140,5,20);
+  color HUDItemColor = color(160,50,160);
+  color HUDItemHeldColor = color(160,50,120);
+  color HUDStroke = color(160,20,40);
+  color HUDHoverStroke = color(160,20,220);
+  color HUDTextColor = color(160,10,240);
+  
+  //node colors
+  color NodeStrokeColor = color(160,20,40);
+  color NodeBarColor = color(168,96,120);
+  color NodeColor = color(160, 28, 164,200);
+  
   Globals()
   {
     workspaceBackground = loadImage("images/bgGrid.png");

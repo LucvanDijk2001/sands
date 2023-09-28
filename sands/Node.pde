@@ -8,6 +8,8 @@ class Node
 
   boolean held = false;
   boolean mouseDown = false;
+  
+  PVector grabOffset = new PVector(0,0);
 
   //========================================INIT==============================//
   Node( int _w, int _h, float _barMargin)
@@ -20,9 +22,11 @@ class Node
   //========================================MAIN==============================//
   void Show()
   {
-    fill(160, 28, 164,200);
+    textAlign(LEFT,CENTER);
+    stroke(globals.NodeStrokeColor);
+    fill(globals.NodeColor);
     rect(pos.x, pos.y, size.x, size.y, 10);
-    fill(168, 96, 120);
+    fill(globals.NodeBarColor);
     rect(pos.x, pos.y, size.x, barMargin, 10, 10, 0, 0);
     text("x:" + round(pos.x) + " - y:" + round(pos.y),pos.x,pos.y-15);
     
@@ -40,6 +44,7 @@ class Node
   {
     PVector mousePos = globals.GetMousePos();
     PVector pmousePos = globals.GetPrevMousePos();
+    
     if (mousePressed)
     {
       if(!mouseDown)
@@ -50,6 +55,8 @@ class Node
           if (mousePos.x > pos.x && mousePos.x < pos.x+size.x && mousePos.y > pos.y && mousePos.y < pos.y+barMargin)
           {
             held = true;
+            grabOffset.x = mousePos.x-pos.x;
+            grabOffset.y = mousePos.y-pos.y;
           }
         }
       }
@@ -63,8 +70,11 @@ class Node
     {
       if(globals.IsShift())
       {
-        pos.x = mousePos.x - mousePos.x%20;
-        pos.y = mousePos.y - mousePos.y%20;
+        pos.x = mousePos.x-grabOffset.x;
+        pos.y = mousePos.y-grabOffset.y;
+        
+        pos.x -= pos.x%20;
+        pos.y -= pos.y%20;
       }
       else
       {
