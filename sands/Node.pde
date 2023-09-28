@@ -14,6 +14,8 @@ class Node
   //========================================INIT==============================//
   Node( int _w, int _h, float _barMargin)
   {
+    pos = PVector.random2D();
+    pos.mult(random(2000));
     barMargin = _barMargin;
     size.x = _w;
     size.y = _h;

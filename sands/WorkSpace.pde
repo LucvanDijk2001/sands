@@ -4,13 +4,15 @@ class Workspace
   float zoom = 1;
   PVector windowPos= new PVector(0, 0);
 
-  Node n = new Node(200, 100, 20);
-  Node n2 = new Node(300,500,40);
-  Node n3 = new Node(500,200,100);
+  ArrayList<Node> nodes;
 
   //========================================INIT==============================//
   Workspace()
   {
+    nodes = new ArrayList<Node>();
+    nodes.add(new Node(200,100,20));
+    nodes.add(new Node(300,500,40));
+    nodes.add(new Node(500,200,100));
     windowPos.x = width/2;
     windowPos.y = height/2;
   }
@@ -25,12 +27,12 @@ class Workspace
   void Show()
   {
     DrawGrid();
-    n.Show();
-    n.Update();
-    n2.Show();
-    n2.Update();
-    n3.Show();
-    n3.Update();
+    for(int i = 0; i < nodes.size(); i++)
+    {
+      Node cn = nodes.get(i);
+      cn.Show();
+      cn.Update();
+    }
   }
 
   //========================================FUNCTIONS==============================//
@@ -82,5 +84,10 @@ class Workspace
   {
     zoom -= change*0.1;
     zoom = constrain(zoom, 0.3, 5);
+  }
+  
+  void AddNode(int w, int h, int bm)
+  {
+    nodes.add(new Node(w,h,bm));
   }
 }
