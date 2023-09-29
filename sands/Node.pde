@@ -12,10 +12,10 @@ class Node
   PVector grabOffset = new PVector(0,0);
 
   //========================================INIT==============================//
-  Node( int _w, int _h, float _barMargin)
+  Node(int _x, int _y, int _w, int _h, float _barMargin)
   {
-    pos = PVector.random2D();
-    pos.mult(random(2000));
+    pos.x = _x;
+    pos.y = _y;
     barMargin = _barMargin;
     size.x = _w;
     size.y = _h;

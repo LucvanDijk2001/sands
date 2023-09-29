@@ -1,0 +1,4 @@
+class HUDConExplorer extends HUDItem
+{
+  
+}

@@ -4,6 +4,7 @@ HUD hud;
 
 
 Workspace tempWorkspace;
+Workspace tempWorkspace2;
 
 
 void setup()
@@ -12,6 +13,7 @@ void setup()
    smooth(2);
    colorMode(HSB);
    tempWorkspace = new Workspace();/////temp/////
+   tempWorkspace2 = new Workspace();/////temp/////
    currentWorkspace = tempWorkspace;
    globals = new Globals();
    hud = new HUD();

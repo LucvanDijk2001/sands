@@ -10,11 +10,9 @@ class Workspace
   Workspace()
   {
     nodes = new ArrayList<Node>();
-    nodes.add(new Node(200,100,20));
-    nodes.add(new Node(300,500,40));
-    nodes.add(new Node(500,200,100));
-    windowPos.x = width/2;
-    windowPos.y = height/2;
+    nodes.add(new Node(0,0,200,100,20));
+    nodes.add(new Node(0,0,300,500,40));
+    nodes.add(new Node(0,0,500,200,100));
   }
 
   //========================================MAIN==============================//
@@ -86,8 +84,8 @@ class Workspace
     zoom = constrain(zoom, 0.3, 5);
   }
   
-  void AddNode(int w, int h, int bm)
+  void AddNode(int x, int y, int w, int h, int bm)
   {
-    nodes.add(new Node(w,h,bm));
+    nodes.add(new Node(x,y,w,h,bm));
   }
 }

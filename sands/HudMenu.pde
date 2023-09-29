@@ -18,11 +18,13 @@ class HUDMenu
     size = new PVector(w, h);
     dragable = d;
     barMargin = bm;
+    title = t;
   }
 
   //===================================MAIN=========================//
   void Show()
   {
+    textAlign(LEFT,CENTER);
     fill(globals.HUDMenuColor);
     stroke(globals.HUDStroke);
     rect(pos.x, pos.y, size.x, size.y);
@@ -49,8 +51,18 @@ class HUDMenu
     return item;
   }
   
+  HUDHDivider AddHUDHDivider(HUDHDivider item, String ID)
+  {
+    AddHUDItem(item,ID);
+    return item;
+  }
+  
   private void AddHUDItem(HUDItem item, String ID)
   {
+    item.pos.x += pos.x;
+    item.pos.y += pos.y;
+    item.pos.y += barMargin;
+    item.menu = this;
     HUDIdentifier newItem = new HUDIdentifier(item, ID);
     HUDIdentifiers.add(newItem);
   }
@@ -59,7 +71,7 @@ class HUDMenu
   {
     textAlign(LEFT,CENTER);
     fill(globals.HUDTextColor);
-    text(t, x, y+barMargin);
+    text(t, pos.x+x, pos.y+y+barMargin);
   }
 
   HUDButton GetButton(String ID)
@@ -73,6 +85,15 @@ class HUDMenu
       }
     }
     return null;
+  }
+  
+  float GetWidth()
+  {
+   return size.x; 
+  }
+  float GetHeight()
+  {
+   return size.y-barMargin; 
   }
 
   //===================================CLASSES=========================//
