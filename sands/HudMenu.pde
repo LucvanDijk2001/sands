@@ -6,14 +6,13 @@ class HUDMenu
   float barMargin;
   boolean dragable;
   String title = "Menu";
-  ArrayList<HUDIdentifier> HUDIdentifiers;
+  ArrayList<HUDItem> HUDItems;
   ArrayList<HUDButton> HUDButtons;
 
   //===================================INIT=========================//
   HUDMenu(int x, int y, int w, int h, int bm, String t, boolean d)
   {
-    HUDIdentifiers = new ArrayList<HUDIdentifier>();
-    HUDButtons = new ArrayList<HUDButton>();
+    HUDItems = new ArrayList<HUDItem>();
     pos = new PVector(x, y);
     size = new PVector(w, h);
     dragable = d;
@@ -36,9 +35,9 @@ class HUDMenu
 
   void Update()
   {
-    for (int i = 0; i < HUDIdentifiers.size(); i++)
+    for (int i = 0; i < HUDItems.size(); i++)
     {
-      HUDItem item = HUDIdentifiers.get(i).item;
+      HUDItem item = HUDItems.get(i);
       item.Show();
       item.Update();
     }
@@ -52,19 +51,6 @@ class HUDMenu
     fill(globals.HUDTextColor);
     text(t, pos.x+x, pos.y+y+barMargin);
   }
-
-  HUDButton GetButton(String ID)
-  {
-    for (int i = 0; i < HUDIdentifiers.size(); i++)
-    {
-      HUDIdentifier hid = HUDIdentifiers.get(i);
-      if (hid.id == ID)
-      {
-        return (HUDButton)hid.item;
-      }
-    }
-    return null;
-  }
   
   float GetWidth()
   {
@@ -77,50 +63,38 @@ class HUDMenu
 
    //===================================HUDITEMS=========================//
 
-  HUDButton AddHUDButton(HUDButton item, String ID)
+  HUDButton AddHUDButton(HUDButton item)
   {
-    AddHUDItem(item,ID);
+    AddHUDItem(item);
     return item;
   }
   
-  HUDHDivider AddHUDHDivider(HUDHDivider item, String ID)
+  HUDHDivider AddHUDHDivider(HUDHDivider item)
   {
-    AddHUDItem(item,ID);
+    AddHUDItem(item);
     return item;
   }
   
-  HUDVDivider AddHUDVDivider(HUDVDivider item, String ID)
+  HUDVDivider AddHUDVDivider(HUDVDivider item)
   {
-    AddHUDItem(item,ID);
+    AddHUDItem(item);
     return item;
   }
   
-  HUDConExplorer AddHUDConExplorer(HUDConExplorer item, String ID)
+  HUDConExplorer AddHUDConExplorer(HUDConExplorer item)
   {
-    AddHUDItem(item,ID);
+    AddHUDItem(item);
     return item;
   }
   
-  private void AddHUDItem(HUDItem item, String ID)
+  private void AddHUDItem(HUDItem item)
   {
     item.pos.x += pos.x;
     item.pos.y += pos.y;
     item.pos.y += barMargin;
     item.menu = this;
-    HUDIdentifier newItem = new HUDIdentifier(item, ID);
-    HUDIdentifiers.add(newItem);
+    HUDItems.add(item);
   }
 
   //===================================CLASSES=========================//
-  class HUDIdentifier
-  {
-    HUDItem item;
-    String id;
-
-    HUDIdentifier(HUDItem i, String ID)
-    {
-      item = i;
-      id = ID;
-    }
-  }
 }
