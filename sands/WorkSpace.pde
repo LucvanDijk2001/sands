@@ -10,9 +10,9 @@ class Workspace
   Workspace()
   {
     nodes = new ArrayList<Node>();
-    nodes.add(new Node(0,0,200,100,20));
-    nodes.add(new Node(0,0,300,500,40));
-    nodes.add(new Node(0,0,500,200,100));
+    AddNode(0,0,200,100,20);
+    AddNode(0,0,300,500,40);
+    AddNode(0,0,500,200,100);
   }
 
   //========================================MAIN==============================//
@@ -20,16 +20,22 @@ class Workspace
   {
     PositionScaleWorkspace();
     PanWorkspace();
+    
+    for(int i = nodes.size(); i > 0; i--)
+    {
+      Node cn = nodes.get(i-1);
+      cn.Update();
+    }
   }
 
   void Show()
   {
     DrawGrid();
+    
     for(int i = 0; i < nodes.size(); i++)
     {
       Node cn = nodes.get(i);
       cn.Show();
-      cn.Update();
     }
   }
 
@@ -86,6 +92,6 @@ class Workspace
   
   void AddNode(int x, int y, int w, int h, int bm)
   {
-    nodes.add(new Node(x,y,w,h,bm));
+    nodes.add(new Node(x,y,w,h,bm,this));
   }
 }

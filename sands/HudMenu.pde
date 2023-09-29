@@ -45,27 +45,6 @@ class HUDMenu
   }
 
   //===================================FUNCTIONS=========================//
-  HUDButton AddHUDButton(HUDButton item, String ID)
-  {
-    AddHUDItem(item,ID);
-    return item;
-  }
-  
-  HUDHDivider AddHUDHDivider(HUDHDivider item, String ID)
-  {
-    AddHUDItem(item,ID);
-    return item;
-  }
-  
-  private void AddHUDItem(HUDItem item, String ID)
-  {
-    item.pos.x += pos.x;
-    item.pos.y += pos.y;
-    item.pos.y += barMargin;
-    item.menu = this;
-    HUDIdentifier newItem = new HUDIdentifier(item, ID);
-    HUDIdentifiers.add(newItem);
-  }
 
   void ShowText(int x, int y, String t)
   {
@@ -94,6 +73,42 @@ class HUDMenu
   float GetHeight()
   {
    return size.y-barMargin; 
+  }
+
+   //===================================HUDITEMS=========================//
+
+  HUDButton AddHUDButton(HUDButton item, String ID)
+  {
+    AddHUDItem(item,ID);
+    return item;
+  }
+  
+  HUDHDivider AddHUDHDivider(HUDHDivider item, String ID)
+  {
+    AddHUDItem(item,ID);
+    return item;
+  }
+  
+  HUDVDivider AddHUDVDivider(HUDVDivider item, String ID)
+  {
+    AddHUDItem(item,ID);
+    return item;
+  }
+  
+  HUDConExplorer AddHUDConExplorer(HUDConExplorer item, String ID)
+  {
+    AddHUDItem(item,ID);
+    return item;
+  }
+  
+  private void AddHUDItem(HUDItem item, String ID)
+  {
+    item.pos.x += pos.x;
+    item.pos.y += pos.y;
+    item.pos.y += barMargin;
+    item.menu = this;
+    HUDIdentifier newItem = new HUDIdentifier(item, ID);
+    HUDIdentifiers.add(newItem);
   }
 
   //===================================CLASSES=========================//

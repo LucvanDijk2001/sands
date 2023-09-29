@@ -7,10 +7,13 @@ class Globals
   float pnmx;
   float pnmy;
 
+  boolean mouseInUse = false;
+
   //hud colors
   color HUDMenuColor = color(140,10,70);
   color HUDMenuBarColor = color(140,5,20);
   color HUDItemColor = color(140,20,40);
+  color HUDItemDentColor = color(140,30,55);
   color HUDItemHeldColor = color(140,5,30);
   color HUDStroke = color(140,5,20);
   color HUDHoverStroke = color(160,20,220);
@@ -19,8 +22,8 @@ class Globals
   //node colors
   color NodeStrokeColor = color(160,20,40);
   color NodeBarColor = color(168,96,120);
+  color NodeTextColor = color(168,78,180);
   color NodeColor = color(160, 28, 164,200);
-
   
   Globals()
   {

@@ -9,7 +9,7 @@ Workspace tempWorkspace2;
 
 void setup()
 {
-   fullScreen(P2D, 1);
+   fullScreen(1);
    smooth(2);
    colorMode(HSB);
    tempWorkspace = new Workspace();/////temp/////
