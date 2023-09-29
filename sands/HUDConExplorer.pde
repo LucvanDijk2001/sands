@@ -17,6 +17,9 @@ class HUDConExplorer extends HUDItem
   
   int yp = 0;
   int h = 0;
+  int a = 0;
+  PGraphics mask;
+  boolean init = false;
   
   HUDConExplorer(int y, int _h)
   {
@@ -26,8 +29,20 @@ class HUDConExplorer extends HUDItem
   
   void Show()
   {
+    if(!init)
+    {
+       init = true;
+       mask = createGraphics((int)menu.size.x,h);
+    }
     fill(globals.HUDItemDentColor);
     stroke(globals.HUDStroke);
-    rect(menu.pos.x,pos.y,menu.pos.x+menu.size.x,h);
+    rect(menu.pos.x,pos.y,menu.size.x,h);
+    
+    mask.beginDraw();
+    mask.clear();
+
+    mask.endDraw();
+    a++;
+    image(mask,menu.pos.x,pos.y);
   }
 }

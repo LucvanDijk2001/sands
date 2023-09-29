@@ -3,6 +3,7 @@ class HUD
   HUDMenu menu;///MAINMENU================================
   HUDButton loadProject;
   HUDButton saveProject;
+  HUDButton exportProject;
   HUDHDivider mainDivider;
   
   //MouseMenu mouseMenu;///MOUSEMENU======================
@@ -18,11 +19,13 @@ class HUD
   HUDMenu debugMenu;///DEBUGMENU==========================
   HUDButton spawnNodeButton;
   
+  ArrayList<HUDMenu> menus = new ArrayList<HUDMenu>();
+  
   HUD()
   {
     int mainmenuwidth = 350;
     int menubars = 20;
-    int menux  = 0,         menuy  = 0,              menuw  = mainmenuwidth, menuh  = 100,                 menubm  = menubars;
+    int menux  = 0,         menuy  = 0,              menuw  = mainmenuwidth, menuh  = 80,                 menubm  = menubars;
     int cmenux = 0,         cmenuy = 0+menuh,        cmenuw = mainmenuwidth, cmenuh = 500,                 cmenubm = menubars;
     int nmenux = 0,         nmenuy = 0+menuh+cmenuh, nmenuw = mainmenuwidth, nmenuh = height-menuh-cmenuh, nmenubm = menubars;
     int dmenux = width-200, dmenuy = 0,              dmenuw = 200,           dmenuh = 200,                 dmenubm = menubars;
@@ -31,12 +34,18 @@ class HUD
     conversationMenu = new HUDMenu(cmenux, cmenuy, cmenuw, cmenuh, cmenubm,"Conversation explorer",false);
     nodeMenu         = new HUDMenu(nmenux, nmenuy, nmenuw, nmenuh, nmenubm,"Nodes",false);
     debugMenu        = new HUDMenu(dmenux, dmenuy, dmenuw, dmenuh, dmenubm,"DEBUG menu",false);
+    //mouseMenu      = new MouseMenu(200,300);
     
-    //mouseMenu = new MouseMenu(200,300);
+    menus.add(menu);
+    menus.add(conversationMenu);
+    menus.add(nodeMenu);
+    menus.add(debugMenu);
+    
     //================================mainmenu=============================================
-    loadProject = menu.AddHUDButton(new HUDButton(0,0,(int)menu.GetWidth()/2,60,"Load project"));
-    saveProject = menu.AddHUDButton(new HUDButton((int)menu.GetWidth()/2,0,(int)menu.GetWidth()/2,60,"Save project"));
-    mainDivider = menu.AddHUDHDivider(new HUDHDivider(70));
+    loadProject   = menu.AddHUDButton(new HUDButton(0,0,(int)menu.GetWidth()/3,40,"Load project"));
+    saveProject   = menu.AddHUDButton(new HUDButton((int)menu.GetWidth()/3,0,(int)menu.GetWidth()/3,40,"Save project"));
+    exportProject = menu.AddHUDButton(new HUDButton((int)menu.GetWidth()/3*2,0,(int)menu.GetWidth()/3,40,"Export project"));
+    mainDivider   = menu.AddHUDHDivider(new HUDHDivider(50));
     
     //================================Conversationmenu=====================================
     explorer            = conversationMenu.AddHUDConExplorer(new HUDConExplorer(0,460));
@@ -52,16 +61,12 @@ class HUD
 
   void Show()
   {
-    menu.Show();
-    menu.Update();
-    conversationMenu.Show();
-    conversationMenu.Update();
-    nodeMenu.Show();
-    nodeMenu.Update();
-    debugMenu.Show();
-    debugMenu.Update();
-    //mouseMenu.Show();
-    //mouseMenu.Update();
+    for(int i = 0; i < menus.size(); i++)
+    {
+       HUDMenu currentMenu = menus.get(i);
+       currentMenu.Show();
+       currentMenu.Update();
+    }
     
     MainMenu();
     ConversationMenu();
@@ -83,11 +88,11 @@ class HUD
   {
     if(workspace1Button.Pressed())
     {
-     currentWorkspace = tempWorkspace; 
+     ChangeWorkspace(0);
     }
     if(workspace2Button.Pressed())
     {
-      currentWorkspace = tempWorkspace2;
+      ChangeWorkspace(1);
     }
   }
   
