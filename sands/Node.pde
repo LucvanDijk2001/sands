@@ -108,8 +108,8 @@ class Node
         pos.x = mousePos.x-grabOffset.x;
         pos.y = mousePos.y-grabOffset.y;
 
-        pos.x -= pos.x%20;
-        pos.y -= pos.y%20;
+        pos.x -= pos.x%owner.gridsize;
+        pos.y -= pos.y%owner.gridsize;
       } else
       {
         pos.x -= pmousePos.x-mousePos.x;

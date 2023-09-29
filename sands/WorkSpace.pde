@@ -3,6 +3,7 @@ class Workspace
   //========================================VALUES==============================//
   float zoom = 1;
   PVector windowPos= new PVector(0, 0);
+  int gridsize = 20;
 
   ArrayList<Node> nodes;
 
@@ -10,9 +11,9 @@ class Workspace
   Workspace()
   {
     nodes = new ArrayList<Node>();
-    AddNode(0,0,200,100,20);
-    AddNode(0,0,300,500,40);
-    AddNode(0,0,500,200,100);
+    AddNode(0, 0, 200, 100, 20);
+    AddNode(0, 0, 200, 60, 20);
+    AddNode(0, 0, 240, 200, 20);
   }
 
   //========================================MAIN==============================//
@@ -20,8 +21,8 @@ class Workspace
   {
     PositionScaleWorkspace();
     PanWorkspace();
-    
-    for(int i = nodes.size(); i > 0; i--)
+
+    for (int i = nodes.size(); i > 0; i--)
     {
       Node cn = nodes.get(i-1);
       cn.Update();
@@ -31,8 +32,8 @@ class Workspace
   void Show()
   {
     DrawGrid();
-    
-    for(int i = 0; i < nodes.size(); i++)
+    strokeWeight(1);
+    for (int i = 0; i < nodes.size(); i++)
     {
       Node cn = nodes.get(i);
       cn.Show();
@@ -42,32 +43,53 @@ class Workspace
   //========================================FUNCTIONS==============================//
   void DrawGrid()
   {
+    gridsize = 20;
+    strokeWeight(1);
+    if (zoom > 2.99)
+    {
+      strokeWeight(0.5);
+      gridsize = 10;
+    }
+    if (zoom < 0.71)
+    {
+      gridsize = 40;
+      strokeWeight(2);
+    }
+    if (zoom < 0.51)
+    {
+      gridsize = 80;
+      strokeWeight(4);
+    }
+    stroke(0, 0, 70);
+    fill(0, 0, 36);
     int xmargin = 2;
     int ymargin = 2;
     float xmg = width/2/zoom;
     float ymg = height/2/zoom;
-    float xleft = xmg%200;
-    float yleft = ymg%200;
+    float xleft = xmg%gridsize;
+    float yleft = ymg%gridsize;
     int xoff = int(xmg-xleft);
     int yoff = int(ymg-yleft);
-    int xstart = (int)(-(windowPos.x /*+ (width/2/zoom)*/) + (windowPos.x%200) - (200*xmargin)) - xoff;
-    int ystart = (int)(-(windowPos.y /*+ (height/2/zoom)*/) + (windowPos.y%200) - (200*ymargin)) - yoff;
+    int xstart = (int)(-(windowPos.x) + (windowPos.x%gridsize) - (gridsize*xmargin)) - xoff;
+    int ystart = (int)(-(windowPos.y) + (windowPos.y%gridsize) - (gridsize*ymargin)) - yoff;
+
     //int xstart = -(int)((windowPos.x) / zoom) - (200*xmargin) + (int)(windowPos.x / zoom % 200);
     //int ystart = -(int)((windowPos.y) / zoom) - (200*ymargin) + (int)(windowPos.y / zoom % 200);
-    int xiter = ceil(width/(200*zoom)) + (xmargin*2);
-    int yiter = ceil(height/(200*zoom)) + (ymargin*2);
+    int xiter = ceil((width)/(gridsize*zoom)) + (xmargin*2);
+    int yiter = ceil(height/(gridsize*zoom)) + (ymargin*2);
     for (int x = 0; x < xiter; x++)
     {
       for (int y = 0; y < yiter; y++)
       {
-        image(globals.workspaceBackground, xstart+200*x, ystart+200*y);
+        rect(xstart+gridsize*x, ystart+gridsize*y, gridsize, gridsize);
+        //image(globals.workspaceBackground, xstart+gridsize*x, ystart+gridsize*y);
       }
     }
-}
+  }
 
   void PositionScaleWorkspace()
   {
-    translate(width/2,height/2);
+    translate(width/2, height/2);
     scale(zoom);
     translate(windowPos.x, windowPos.y);
   }
@@ -89,9 +111,9 @@ class Workspace
     zoom -= change*0.1;
     zoom = constrain(zoom, 0.3, 5);
   }
-  
+
   void AddNode(int x, int y, int w, int h, int bm)
   {
-    nodes.add(new Node(x,y,w,h,bm,this));
+    nodes.add(new Node(x, y, w, h, bm, this));
   }
 }
