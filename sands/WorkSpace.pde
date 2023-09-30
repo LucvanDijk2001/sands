@@ -55,7 +55,7 @@ class Workspace
     int amt = constrain((int)abs(n1.pos.x-n2.pos.x),100,1000000);
     float ydif = abs(n1.pos.y-n2.pos.y);
     ydif /= 500;
-    amt *= constrain(ydif,0,1);
+    amt *= constrain(ydif,0.6,1);
     bezier(n1.pos.x+n1.size.x,n1.pos.y,n1.pos.x+n1.size.x+amt,n1.pos.y,n2.pos.x-amt,n2.pos.y,n2.pos.x,n2.pos.y);
     strokeWeight(1);
     //TEMP=======================================
