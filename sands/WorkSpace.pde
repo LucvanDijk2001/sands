@@ -48,7 +48,7 @@ class Workspace
     
     //TEMP=======================================
     noFill();
-    strokeWeight(2);
+    strokeWeight(constrain(2/zoom,1,100));
     stroke(170,80,120);
     Node n1 = nodes.get(1);
     Node n2 = nodes.get(2);
