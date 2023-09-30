@@ -11,10 +11,6 @@ void setup()
   colorMode(HSB);
   WorkspaceFolder defaultFolder = new WorkspaceFolder("default");
   folders.add(defaultFolder);
-  for(int i = 0; i < 20; i++)
-  {
-   folders.add(new WorkspaceFolder(str(i)));
-  }
   workspaces.add(new Workspace("workspace1",defaultFolder));
   workspaces.add(new Workspace("workspace2",defaultFolder));
   currentWorkspace = workspaces.get(0);
