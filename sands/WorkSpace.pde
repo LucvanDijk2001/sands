@@ -2,14 +2,19 @@ class Workspace
 {
   //========================================VALUES==============================//
   float zoom = 1;
+  String workspaceName = "workspace";
+  WorkspaceFolder owner;
   PVector windowPos= new PVector(0, 0);
   int gridsize = 20;
 
   ArrayList<Node> nodes;
 
   //========================================INIT==============================//
-  Workspace()
+  Workspace(String name, WorkspaceFolder folder)
   {
+    owner = folder;
+    workspaceName = name;
+    owner.AddWorkspace(this);
     nodes = new ArrayList<Node>();
     AddNode(0, 0, 200, 100, 20);
     AddNode(0, 0, 200, 60, 20);
@@ -55,7 +60,7 @@ class Workspace
       gridsize = 40;
       strokeWeight(2);
     }
-    if (zoom < 0.51)
+    if (zoom < 0.41)
     {
       gridsize = 80;
       strokeWeight(4);

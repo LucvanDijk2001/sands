@@ -1,5 +1,6 @@
 Workspace currentWorkspace;
 ArrayList<Workspace> workspaces = new ArrayList<Workspace>();
+ArrayList<WorkspaceFolder> folders = new ArrayList<WorkspaceFolder>();
 Globals globals;
 HUD hud;
 
@@ -8,8 +9,14 @@ void setup()
   fullScreen(1);
   smooth(2);
   colorMode(HSB);
-  workspaces.add(new Workspace());
-  workspaces.add(new Workspace());
+  WorkspaceFolder defaultFolder = new WorkspaceFolder("default");
+  folders.add(defaultFolder);
+  for(int i = 0; i < 20; i++)
+  {
+   folders.add(new WorkspaceFolder(str(i)));
+  }
+  workspaces.add(new Workspace("workspace1",defaultFolder));
+  workspaces.add(new Workspace("workspace2",defaultFolder));
   currentWorkspace = workspaces.get(0);
   globals = new Globals();
   hud = new HUD();

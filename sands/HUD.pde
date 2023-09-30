@@ -48,7 +48,7 @@ class HUD
     mainDivider   = menu.AddHUDHDivider(new HUDHDivider(50));
     
     //================================Conversationmenu=====================================
-    explorer            = conversationMenu.AddHUDConExplorer(new HUDConExplorer(0,460));
+    explorer            = conversationMenu.AddHUDConExplorer(new HUDConExplorer(0,0,cmenuw,460));
     conversationDivider = conversationMenu.AddHUDHDivider(new HUDHDivider(470));
     
     //================================Nodemenu=============================================

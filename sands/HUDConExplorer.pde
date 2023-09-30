@@ -16,45 +16,44 @@ class HUDConExplorer extends HUDItem
   //make folder item object
 
   //==================================================DATA================================
-  int windowHeight = 0;
+  PVector size = new PVector(0, 0);
   PGraphics mask;
-  boolean init = false;
-
-  SimpleMaskGraphic smg; //==temp
+  boolean onWindow = false;
 
   //==================================================CONSTRUCT================================
-  HUDConExplorer(int y, int _h)
+  HUDConExplorer(int x, int y, int w, int h)
   {
+    pos.x = x;
     pos.y = y;
-    windowHeight = _h;
+    size.x = w;
+    size.y = h;
+    mask = createGraphics((int)size.x, (int)size.y);
   }
 
   //==================================================UPDATE================================
   void Show()
   {
-    CheckInit();
+    CheckOnWindow();
 
     fill(globals.HUDItemDentColor);
     stroke(globals.HUDStroke);
-    rect(menu.pos.x, pos.y, menu.size.x, windowHeight);
+    rect(pos.x,pos.y,size.x,size.y);
 
     mask.beginDraw();
     mask.clear();
-
-
 
     mask.endDraw();
     image(mask, menu.pos.x, pos.y);
   }
 
   //==================================================FUNCTIONS================================
-  void CheckInit()
+  void CheckOnWindow()
   {
-    if (!init)
+    onWindow = false;
+    PVector mousePos = globals.GetMouseHudPos();
+    if (mousePos.x > pos.x && mousePos.x < pos.x+size.x && mousePos.y > pos.y && mousePos.y < pos.y + size.y)
     {
-      init = true;
-      mask = createGraphics((int)menu.size.x, windowHeight);
-      smg = new SimpleMaskGraphic(10, 10, 50, 50, mask);//==temp
+      onWindow = true;
     }
   }
 
@@ -62,6 +61,8 @@ class HUDConExplorer extends HUDItem
   class MaskGraphic
   {
     PGraphics mask;
+    PVector gpos = new PVector(0, 0);
+    PVector gsize = new PVector(0, 0);
     MaskGraphic(PGraphics m)
     {
       mask = m;
@@ -71,29 +72,5 @@ class HUDConExplorer extends HUDItem
     };
     void Update() {
     };
-  }
-
-  class SimpleMaskGraphic extends MaskGraphic
-  {
-    int x, y, w, h;
-    SimpleMaskGraphic(int _x, int _y, int _w, int _h, PGraphics m)
-    {
-      super(m);
-      x = _x;
-      y = _y;
-      w = _w;
-      h = _h;
-    }
-
-    void Show()
-    {
-      mask.rect(x, y, w, h, 5);
-    }
-
-    void Update()
-    {
-      y ++;
-      w ++;
-    }
   }
 }

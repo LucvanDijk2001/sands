@@ -18,6 +18,10 @@ class Globals
   color HUDStroke = color(140,5,20);
   color HUDHoverStroke = color(160,20,220);
   color HUDTextColor = color(160,10,240);
+  color HUDSliderColor = color(140,20,40);
+  color HUDSliderHandleColor = color(140,25,60);
+  color HUDFolderColorClosed = color(140,20,70);
+  color HUDFolderColorOpen = color(140,20,100);
   
   //node colors
   color NodeStrokeColor = color(160,20,40);
