@@ -63,6 +63,19 @@ class HUDConExplorer extends HUDItem
     image(mask, menu.pos.x, pos.y+explorerBarHeight);
     ShowButtons();
   }
+  
+  void Update()
+  {
+    if(addFolderButton.Released())
+    {
+      folders.add(new WorkspaceFolder("folder" + folders.size()));
+    }
+    
+    if(addConversationButton.Released())
+    {
+      workspaces.add(new Workspace("workspace" + workspaces.size(),folders.get(folders.size()-1)));
+    }
+  }
 
   //==================================================FUNCTIONS================================
   void ShowButtons()

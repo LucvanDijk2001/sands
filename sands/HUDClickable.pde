@@ -61,7 +61,7 @@ class HUDClickable extends HUDItem
   {
     PVector mousePos = PVector.sub(globals.GetMouseHudPos(),mouseOffset);
 
-    if (mousePos.x > pos.x && mousePos.x < pos.x+size.x && mousePos.y > pos.y && mousePos.y < pos.y+size.y)
+    if (mousePos.x > pos.x-1 && mousePos.x < pos.x+size.x && mousePos.y > pos.y-1 && mousePos.y < pos.y+size.y)
     {
       return true;
     }

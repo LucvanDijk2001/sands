@@ -7,6 +7,8 @@ class Workspace
   PVector windowPos= new PVector(0, 0);
   int gridsize = 20;
 
+  int bgDrawCalls = 0;
+
   ArrayList<Node> nodes;
 
   //========================================INIT==============================//
@@ -82,10 +84,12 @@ class Workspace
     //int ystart = -(int)((windowPos.y) / zoom) - (200*ymargin) + (int)(windowPos.y / zoom % 200);
     int xiter = ceil((width)/(gridsize*zoom)) + (xmargin*2);
     int yiter = ceil(height/(gridsize*zoom)) + (ymargin*2);
+    bgDrawCalls = 0;
     for (int x = 0; x < xiter; x++)
     {
       for (int y = 0; y < yiter; y++)
       {
+        bgDrawCalls ++;
         rect(xstart+gridsize*x, ystart+gridsize*y, gridsize, gridsize);
         //image(globals.workspaceBackground, xstart+gridsize*x, ystart+gridsize*y);
       }

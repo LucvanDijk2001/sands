@@ -29,9 +29,9 @@ class HUD
     int menux  = 0, menuy  = 0, menuw  = mainmenuwidth, menuh  = 80, menubm  = menubars;
     int cmenux = 0, cmenuy = 0+menuh, cmenuw = mainmenuwidth, cmenuh = 500, cmenubm = menubars;
     int nmenux = 0, nmenuy = 0+menuh+cmenuh, nmenuw = mainmenuwidth, nmenuh = height-menuh-cmenuh, nmenubm = menubars;
-    int dmenux = width-200, dmenuy = 0, dmenuw = 200, dmenuh = 200, dmenubm = menubars;
+    int dmenux = width-200, dmenuy = 0, dmenuw = 200, dmenuh = 500, dmenubm = menubars;
 
-    menu             = new HUDMenu(menux, menuy, menuw, menuh, menubm, "HUD menu", false);
+    menu             = new HUDMenu(menux, menuy, menuw, menuh, menubm, "HUD menu", true);
     conversationMenu = new HUDMenu(cmenux, cmenuy, cmenuw, cmenuh, cmenubm, "Conversation explorer", false);
     nodeMenu         = new HUDMenu(nmenux, nmenuy, nmenuw, nmenuh, nmenubm, "Nodes", false);
     debugMenu        = new HUDMenu(dmenux, dmenuy, dmenuw, dmenuh, dmenubm, "DEBUG menu", false);
@@ -57,8 +57,8 @@ class HUD
     workspace2Button = nodeMenu.AddHUDButton(10, 225, 100, 50, "Workspace 2");
 
     //================================Debugmenu============================================
-    spawnNodeButton          = debugMenu.AddHUDButton(0, 150, (int)debugMenu.size.x/2, 30, "Spawn node");
-    printFileStructureButton = debugMenu.AddHUDButton((int)debugMenu.size.x/2, 150, (int)debugMenu.size.x/2, 30, "print fs");
+    spawnNodeButton          = debugMenu.AddHUDButton(0, dmenuh-50, (int)debugMenu.size.x/2, 30, "Spawn node");
+    printFileStructureButton = debugMenu.AddHUDButton((int)debugMenu.size.x/2, dmenuh-50, (int)debugMenu.size.x/2, 30, "print fs");
   }
 
   void Show()
@@ -102,7 +102,11 @@ class HUD
     debugMenu.ShowText(10, 10, "workspacesition x: " + round(currentWorkspace.windowPos.x * -1));
     debugMenu.ShowText(10, 25, "workspace position y: " + round(currentWorkspace.windowPos.y * -1));
     debugMenu.ShowText(10, 50, "workspace zoom: " + nf(currentWorkspace.zoom, 0, 1));
-    debugMenu.ShowText(10, 65, "FPS: " + frameRate);
+    debugMenu.ShowText(10, 75, "Folder amount: " + folders.size(),color(70,200,200));
+    debugMenu.ShowText(10, 90, "Workspace amount: " + workspaces.size(),color(70,200,200));
+    
+    debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-55), "Background drawCalls: " + currentWorkspace.bgDrawCalls,color(30,200,200));
+    debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-40), "FPS: " + frameRate,color(30,200,200));
 
     if (spawnNodeButton.Released())
     {
