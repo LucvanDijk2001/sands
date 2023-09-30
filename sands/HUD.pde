@@ -40,7 +40,6 @@ class HUD
     menus.add(menu);
     menus.add(conversationMenu);
     menus.add(nodeMenu);
-    menus.add(debugMenu);
 
     //================================mainmenu=============================================
     loadProject   = menu.AddHUDButton(0, 0, (int)menu.GetWidth()/3-1, 40, "Load project");
@@ -70,10 +69,20 @@ class HUD
       currentMenu.Update();
     }
 
+    if (debug)
+    {
+      debugMenu.Show();
+      debugMenu.Update();
+    }
+
     MainMenu();
     ConversationMenu();
     NodeMenu();
-    DebugMenu();
+    
+    if(debug)
+    {
+      DebugMenu();
+    }
   }
 
   void MainMenu()
@@ -102,11 +111,11 @@ class HUD
     debugMenu.ShowText(10, 10, "workspacesition x: " + round(currentWorkspace.windowPos.x * -1));
     debugMenu.ShowText(10, 25, "workspace position y: " + round(currentWorkspace.windowPos.y * -1));
     debugMenu.ShowText(10, 50, "workspace zoom: " + nf(currentWorkspace.zoom, 0, 1));
-    debugMenu.ShowText(10, 75, "Folder amount: " + folders.size(),color(70,200,200));
-    debugMenu.ShowText(10, 90, "Workspace amount: " + workspaces.size(),color(70,200,200));
-    
-    debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-55), "Background drawCalls: " + currentWorkspace.bgDrawCalls,color(30,200,200));
-    debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-40), "FPS: " + frameRate,color(30,200,200));
+    debugMenu.ShowText(10, 75, "Folder amount: " + folders.size(), color(70, 200, 200));
+    debugMenu.ShowText(10, 90, "Workspace amount: " + workspaces.size(), color(70, 200, 200));
+
+    debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-55), "Background drawCalls: " + currentWorkspace.bgDrawCalls, color(30, 200, 200));
+    debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-40), "FPS: " + frameRate, color(30, 200, 200));
 
     if (spawnNodeButton.Released())
     {

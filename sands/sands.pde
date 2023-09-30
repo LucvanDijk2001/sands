@@ -4,6 +4,8 @@ ArrayList<WorkspaceFolder> folders = new ArrayList<WorkspaceFolder>();
 Globals globals;
 HUD hud;
 
+boolean debug = false;
+
 void setup()
 {
   fullScreen(1);
@@ -11,8 +13,8 @@ void setup()
   colorMode(HSB);
   WorkspaceFolder defaultFolder = new WorkspaceFolder("default");
   folders.add(defaultFolder);
-  workspaces.add(new Workspace("workspace1",defaultFolder));
-  workspaces.add(new Workspace("workspace2",defaultFolder));
+  workspaces.add(new Workspace("workspace1", defaultFolder));
+  workspaces.add(new Workspace("workspace2", defaultFolder));
   currentWorkspace = workspaces.get(0);
   globals = new Globals();
   hud = new HUD();
@@ -20,7 +22,7 @@ void setup()
 }
 
 void draw()
-{
+{ 
   background(0);
   //update global values
   globals.Update();
@@ -39,17 +41,26 @@ void mouseWheel(MouseEvent event)
 {
   boolean doZoom = true;
   PVector mousePos = globals.GetMouseHudPos();
-  
-  for(int i = 0; i < hud.menus.size(); i++)
+
+  for (int i = 0; i < hud.menus.size(); i++)
   {
     HUDMenu currentMenu = hud.menus.get(i);
-    if(mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
+    if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
     {
-       doZoom = false; 
+      doZoom = false;
     }
   }
-  
-  if(doZoom)
+
+  if (debug)
+  {
+    HUDMenu currentMenu = hud.debugMenu;
+    if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
+    {
+      doZoom = false;
+    }
+  }
+
+  if (doZoom)
   {
     currentWorkspace.ZoomWorkspace(event.getCount());
   }
@@ -58,4 +69,12 @@ void mouseWheel(MouseEvent event)
 void ChangeWorkspace(int workspaceID)
 {
   currentWorkspace = workspaces.get(workspaceID);
+}
+
+void keyPressed()
+{
+ if(key == 'p')
+ {
+  debug = !debug; 
+ }
 }
