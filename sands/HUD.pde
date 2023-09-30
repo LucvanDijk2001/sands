@@ -43,22 +43,22 @@ class HUD
     menus.add(debugMenu);
 
     //================================mainmenu=============================================
-    loadProject   = menu.AddHUDButton(new HUDButton(0, 0, (int)menu.GetWidth()/3, 40, "Load project"));
-    saveProject   = menu.AddHUDButton(new HUDButton((int)menu.GetWidth()/3, 0, (int)menu.GetWidth()/3, 40, "Save project"));
-    exportProject = menu.AddHUDButton(new HUDButton((int)menu.GetWidth()/3*2, 0, (int)menu.GetWidth()/3, 40, "Export project"));
-    mainDivider   = menu.AddHUDHDivider(new HUDHDivider(50));
+    loadProject   = menu.AddHUDButton(0, 0, (int)menu.GetWidth()/3-1, 40, "Load project");
+    saveProject   = menu.AddHUDButton((int)menu.GetWidth()/3, 0, (int)menu.GetWidth()/3-1, 40, "Save project");
+    exportProject = menu.AddHUDButton((int)menu.GetWidth()/3*2, 0, (int)menu.GetWidth()/3+1, 40, "Export project");
+    mainDivider   = menu.AddHUDHDivider(50);
 
     //================================Conversationmenu=====================================
-    explorer            = conversationMenu.AddHUDConExplorer(new HUDConExplorer(0, 0, cmenuw, 460));
-    conversationDivider = conversationMenu.AddHUDHDivider(new HUDHDivider(470));
+    explorer            = conversationMenu.AddHUDConExplorer(0, 0, cmenuw, 460);
+    conversationDivider = conversationMenu.AddHUDHDivider(470);
 
     //================================Nodemenu=============================================
-    workspace1Button = nodeMenu.AddHUDButton(new HUDButton(10, 100, 100, 50, "Workspace 1"));
-    workspace2Button = nodeMenu.AddHUDButton(new HUDButton(10, 225, 100, 50, "Workspace 2"));
+    workspace1Button = nodeMenu.AddHUDButton(10, 100, 100, 50, "Workspace 1");
+    workspace2Button = nodeMenu.AddHUDButton(10, 225, 100, 50, "Workspace 2");
 
     //================================Debugmenu============================================
-    spawnNodeButton          = debugMenu.AddHUDButton(new HUDButton(0, 150, (int)debugMenu.size.x/2, 30, "Spawn node"));
-    printFileStructureButton = debugMenu.AddHUDButton(new HUDButton((int)debugMenu.size.x/2, 150, (int)debugMenu.size.x/2, 30, "print fs"));
+    spawnNodeButton          = debugMenu.AddHUDButton(0, 150, (int)debugMenu.size.x/2, 30, "Spawn node");
+    printFileStructureButton = debugMenu.AddHUDButton((int)debugMenu.size.x/2, 150, (int)debugMenu.size.x/2, 30, "print fs");
   }
 
   void Show()

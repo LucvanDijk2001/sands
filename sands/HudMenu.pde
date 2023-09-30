@@ -63,28 +63,39 @@ class HUDMenu
 
    //===================================HUDITEMS=========================//
 
-  HUDButton AddHUDButton(HUDButton item)
+  HUDButton AddHUDButton(int x, int y, int w, int h, String title)
   {
-    AddHUDItem(item);
-    return item;
+    HUDButton button = new HUDButton(x,y,w,h,title,this);
+    AddHUDItem(button);
+    return button;
   }
   
-  HUDHDivider AddHUDHDivider(HUDHDivider item)
+  HUDButton AddHUDButton(int x, int y, int w, int h, String title, int mox, int moy)
   {
-    AddHUDItem(item);
-    return item;
+    HUDButton button = new HUDButton(x,y,w,h,title,mox,moy,this);
+    AddHUDItem(button);
+    return button;
   }
   
-  HUDVDivider AddHUDVDivider(HUDVDivider item)
+  HUDHDivider AddHUDHDivider(int m)
   {
-    AddHUDItem(item);
-    return item;
+    HUDHDivider divier = new HUDHDivider(m,this);
+    AddHUDItem(divier);
+    return divier;
   }
   
-  HUDConExplorer AddHUDConExplorer(HUDConExplorer item)
+  HUDVDivider AddHUDVDivider(int m)
   {
-    AddHUDItem(item);
-    return item;
+    HUDVDivider divier = new HUDVDivider(m,this);
+    AddHUDItem(divier);
+    return divier;
+  }
+  
+  HUDConExplorer AddHUDConExplorer(int x, int y, int w, int h)
+  {
+    HUDConExplorer explorer = new HUDConExplorer(x,y,w,h,this);
+    AddHUDItem(explorer);
+    return explorer;
   }
   
   private void AddHUDItem(HUDItem item)
@@ -92,7 +103,6 @@ class HUDMenu
     item.pos.x += pos.x;
     item.pos.y += pos.y;
     item.pos.y += barMargin;
-    item.menu = this;
     HUDItems.add(item);
   }
 

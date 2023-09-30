@@ -16,37 +16,63 @@ class HUDConExplorer extends HUDItem
   //make folder item object
 
   //==================================================DATA================================
+  //explorer window
   PVector size = new PVector(0, 0);
-  PGraphics mask;
   boolean onWindow = false;
+  int explorerBarHeight = 30;
+
+  //explorer bar
+  HUDButton addFolderButton;
+  HUDButton addConversationButton;
+
+  //explorer graphic
+  PGraphics mask;
+
 
   //==================================================CONSTRUCT================================
-  HUDConExplorer(int x, int y, int w, int h)
+  HUDConExplorer(int x, int y, int w, int h, HUDMenu menu)
   {
+    super(menu);
     pos.x = x;
     pos.y = y;
     size.x = w;
     size.y = h;
-    mask = createGraphics((int)size.x, (int)size.y);
+    mask = createGraphics((int)size.x, (int)size.y-explorerBarHeight);
+
+    //buttons
+    addFolderButton       = new HUDButton((int)menu.pos.x, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2-1, explorerBarHeight, "add folder", menu);
+    addConversationButton = new HUDButton((int)menu.pos.x+(int)menu.size.x/2, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2, explorerBarHeight, "add conversation", menu);
   }
 
   //==================================================UPDATE================================
   void Show()
   {
     CheckOnWindow();
-
-    fill(globals.HUDItemDentColor);
-    stroke(globals.HUDStroke);
-    rect(pos.x,pos.y,size.x,size.y);
+    //fill(globals.HUDItemDentColor);
+    //stroke(globals.HUDStroke);
+    //rect(pos.x,pos.y,size.x,size.y);
 
     mask.beginDraw();
     mask.clear();
 
+    mask.fill(globals.HUDItemDentColor);
+    mask.stroke(globals.HUDStroke);
+    mask.rect(0, 0, mask.width, mask.height);
+
     mask.endDraw();
-    image(mask, menu.pos.x, pos.y);
+    image(mask, menu.pos.x, pos.y+explorerBarHeight);
+    ShowButtons();
   }
 
   //==================================================FUNCTIONS================================
+  void ShowButtons()
+  {
+    addFolderButton.Show();
+    addFolderButton.Update();
+    addConversationButton.Show();
+    addConversationButton.Update();
+  }
+
   void CheckOnWindow()
   {
     onWindow = false;

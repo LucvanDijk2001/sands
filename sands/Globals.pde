@@ -57,10 +57,20 @@ class Globals
      return new PVector(mouseX,mouseY); 
   }
   
+  PVector GetMouseHudPos(int offsetX, int offsetY)
+  {
+    return new PVector(mouseX+offsetX, mouseY+offsetY);
+  }
+  
   PVector GetPrevMouseHudPos()
   {
     return new PVector(pmouseX,pmouseY);
-  }  
+  }
+  
+  PVector GetPrevMouseHudPos(int offsetX, int offsetY)
+  {
+    return new PVector(mouseX+offsetX, mouseY+offsetY);
+  }
   
   boolean IsShift()
   {

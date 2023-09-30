@@ -1,4 +1,1 @@
-class HUDText extends HUDItem
-{
-  
-}
+
