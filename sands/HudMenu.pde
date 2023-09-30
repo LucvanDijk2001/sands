@@ -7,7 +7,6 @@ class HUDMenu
   boolean dragable;
   String title = "Menu";
   ArrayList<HUDItem> HUDItems;
-  ArrayList<HUDButton> HUDButtons;
 
   //===================================INIT=========================//
   HUDMenu(int x, int y, int w, int h, int bm, String t, boolean d)
