@@ -45,6 +45,20 @@ class Workspace
       Node cn = nodes.get(i);
       cn.Show();
     }
+    
+    //TEMP=======================================
+    noFill();
+    strokeWeight(2);
+    stroke(170,80,120);
+    Node n1 = nodes.get(1);
+    Node n2 = nodes.get(2);
+    int amt = constrain((int)abs(n1.pos.x-n2.pos.x),100,1000000);
+    float ydif = abs(n1.pos.y-n2.pos.y);
+    ydif /= 500;
+    amt *= constrain(ydif,0,1);
+    bezier(n1.pos.x+n1.size.x,n1.pos.y,n1.pos.x+n1.size.x+amt,n1.pos.y,n2.pos.x-amt,n2.pos.y,n2.pos.x,n2.pos.y);
+    strokeWeight(1);
+    //TEMP=======================================
   }
 
   //========================================FUNCTIONS==============================//
@@ -60,12 +74,12 @@ class Workspace
     if (zoom < 0.71)
     {
       gridsize = 40;
-      strokeWeight(2);
+      strokeWeight(1.5);
     }
     if (zoom < 0.41)
     {
       gridsize = 80;
-      strokeWeight(4);
+      strokeWeight(2);
     }
     stroke(0, 0, 70);
     fill(0, 0, 36);
