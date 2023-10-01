@@ -1,24 +1,27 @@
-Workspace currentWorkspace;
-ArrayList<Workspace> workspaces = new ArrayList<Workspace>();
-ArrayList<WorkspaceFolder> folders = new ArrayList<WorkspaceFolder>();
+//program
 Globals globals;
 HUD hud;
-
+Workspace currentWorkspace;
 boolean debug = false;
+
+//project structure
+ArrayList<Workspace> workspaces = new ArrayList<Workspace>();
+ArrayList<WorkspaceFolder> folders = new ArrayList<WorkspaceFolder>();
 
 void setup()
 {
+  //window
   fullScreen(1);
   smooth(2);
   colorMode(HSB);
-  WorkspaceFolder defaultFolder = new WorkspaceFolder("default");
-  folders.add(defaultFolder);
-  workspaces.add(new Workspace("workspace1", defaultFolder));
-  workspaces.add(new Workspace("workspace2", defaultFolder));
-  currentWorkspace = workspaces.get(0);
+  
+  //program
   globals = new Globals();
   hud = new HUD();
   textAlign(LEFT, CENTER);
+  
+  //default
+  MakeDefaultProject();
 }
 
 void draw()
@@ -35,6 +38,15 @@ void draw()
 
   //HUD calls
   hud.Show();
+}
+
+void MakeDefaultProject()
+{
+  WorkspaceFolder defaultFolder = new WorkspaceFolder("default");
+  folders.add(defaultFolder);
+  workspaces.add(new Workspace("workspace1", defaultFolder));
+  workspaces.add(new Workspace("workspace2", defaultFolder));
+  currentWorkspace = workspaces.get(0);
 }
 
 void mouseWheel(MouseEvent event)
@@ -73,8 +85,8 @@ void ChangeWorkspace(int workspaceID)
 
 void keyPressed()
 {
- if(key == 'p')
- {
-  debug = !debug; 
- }
+  if (key == 'p')
+  {
+    debug = !debug;
+  }
 }

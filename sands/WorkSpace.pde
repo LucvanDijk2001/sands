@@ -48,32 +48,31 @@ class Workspace
 
     //TEMP=======================================
     noFill();
-    for(int i = 0; i < nodes.size()-1; i++)
+
+    strokeWeight(constrain(2/zoom, 1, 100));
+    stroke(170, 80, 120);
+    Node n1 = nodes.get(nodes.size()-1);
+    Node n2 = nodes.get(nodes.size()-2);
+    int amt = constrain((int)abs(n1.pos.x-n2.pos.x), 100, 1000000);
+    float ydif = abs(n1.pos.y-n2.pos.y);
+    ydif /= 500;
+    amt *= constrain(ydif, 0, 1);
+    bezier(n1.pos.x+n1.size.x, n1.pos.y, n1.pos.x+n1.size.x+amt, n1.pos.y, n2.pos.x-amt, n2.pos.y, n2.pos.x, n2.pos.y);
+
+    if (debug)
     {
-      strokeWeight(constrain(2/zoom, 1, 100));
-      stroke(170, 80, 120);
-      Node n1 = nodes.get(i);
-      Node n2 = nodes.get(i+1);
-      int amt = constrain((int)abs(n1.pos.x-n2.pos.x), 100, 1000000);
-      float ydif = abs(n1.pos.y-n2.pos.y);
-      ydif /= 500;
-      amt *= constrain(ydif, 0, 1);
-      bezier(n1.pos.x+n1.size.x, n1.pos.y, n1.pos.x+n1.size.x+amt, n1.pos.y, n2.pos.x-amt, n2.pos.y, n2.pos.x, n2.pos.y);
-  
-      if (debug)
-      {
-        stroke(240, 200, 200);
-        circle(n1.pos.x+n1.size.x, n1.pos.y, 20);
-        circle(n1.pos.x+n1.size.x+amt, n1.pos.y, 20);
-        circle(n2.pos.x-amt, n2.pos.y, 20);
-        circle(n2.pos.x, n2.pos.y, 20);
-        stroke(40, 200, 200);
-        strokeWeight(constrain(0.5/zoom, 0.3, 100));
-        line(n1.pos.x+n1.size.x, n1.pos.y, n1.pos.x+n1.size.x+amt, n1.pos.y);
-        line(n1.pos.x+n1.size.x+amt, n1.pos.y, n2.pos.x-amt, n2.pos.y);
-        line(n2.pos.x-amt, n2.pos.y, n2.pos.x, n2.pos.y);
-      }
+      strokeWeight(constrain(0.4/zoom, 0.2, 100));
+      stroke(240, 200, 200);
+      circle(n1.pos.x+n1.size.x, n1.pos.y, 10);
+      circle(n1.pos.x+n1.size.x+amt, n1.pos.y, 10);
+      circle(n2.pos.x-amt, n2.pos.y, 10);
+      circle(n2.pos.x, n2.pos.y, 10);
+      stroke(40, 200, 200);
+      line(n1.pos.x+n1.size.x, n1.pos.y, n1.pos.x+n1.size.x+amt, n1.pos.y);
+      line(n1.pos.x+n1.size.x+amt, n1.pos.y, n2.pos.x-amt, n2.pos.y);
+      line(n2.pos.x-amt, n2.pos.y, n2.pos.x, n2.pos.y);
     }
+    
     strokeWeight(1);
     //TEMP=======================================
   }
