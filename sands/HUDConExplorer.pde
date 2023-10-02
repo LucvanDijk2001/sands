@@ -25,9 +25,20 @@ class HUDConExplorer extends HUDItem
   HUDButton addFolderButton;
   HUDButton addConversationButton;
 
+  //explorer area
+  HUDSlider slider;
+  int sliderWidth = 20;
+  int contentSize = 0;
+  int areaOffset = 0;
+  int scrollSpeed = 15;
+  int maxScroll = 0;
+
   //explorer graphic
   PGraphics mask;
-
+  ArrayList<MaskGraphic> maskGraphics = new ArrayList<MaskGraphic>();
+  SimpleMaskGraphic g1;
+  SimpleMaskGraphic g2;
+  SimpleMaskGraphic g3;
 
   //==================================================CONSTRUCT================================
   HUDConExplorer(int x, int y, int w, int h, HUDMenu menu)
@@ -37,47 +48,102 @@ class HUDConExplorer extends HUDItem
     pos.y = y;
     size.x = w;
     size.y = h;
-    mask = createGraphics((int)size.x, (int)size.y-explorerBarHeight);
+    mask = createGraphics((int)size.x-sliderWidth, (int)size.y-explorerBarHeight);
 
     //buttons
     addFolderButton       = new HUDButton((int)menu.pos.x, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2-1, explorerBarHeight, "add folder", menu);
     addConversationButton = new HUDButton((int)menu.pos.x+(int)menu.size.x/2, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2, explorerBarHeight, "add conversation", menu);
+    slider                = new HUDSlider((int)menu.pos.x, (int)menu.pos.y+explorerBarHeight+(int)menu.barMargin, sliderWidth, (int)menu.size.y-explorerBarHeight-(int)menu.barMargin, menu);
+
+    g1 = new SimpleMaskGraphic(0, 0, 100, 100, mask);
+    g2 = new SimpleMaskGraphic(0, 350, 100, 100, mask);
+    g3 = new SimpleMaskGraphic(200, 450, 50, 200, mask);
+    maskGraphics.add(g1);
+    maskGraphics.add(g2);
+    maskGraphics.add(g3);
   }
 
   //==================================================UPDATE================================
   void Show()
   {
     CheckOnWindow();
-    //fill(globals.HUDItemDentColor);
-    //stroke(globals.HUDStroke);
-    //rect(pos.x,pos.y,size.x,size.y);
+    fill(globals.HUDItemDentColor);
+    stroke(globals.HUDStroke);
+    rect(pos.x, pos.y, size.x, size.y);
 
     mask.beginDraw();
     mask.clear();
 
-    mask.fill(globals.HUDItemDentColor);
-    mask.stroke(globals.HUDStroke);
-    mask.rect(0, 0, mask.width, mask.height);
+    for (int i = 0; i < maskGraphics.size(); i++)
+    {
+      maskGraphics.get(i).Show(areaOffset);
+    }
 
     mask.endDraw();
-    image(mask, menu.pos.x, pos.y+explorerBarHeight);
+    image(mask, menu.pos.x+sliderWidth, pos.y+explorerBarHeight);
     ShowButtons();
+    slider.Show();
+    slider.Update();
   }
-  
+
   void Update()
   {
-    if(addFolderButton.Released())
+    if (addFolderButton.Released())
     {
       folders.add(new WorkspaceFolder("folder" + folders.size()));
     }
-    
-    if(addConversationButton.Released())
+
+    if (addConversationButton.Released())
     {
-      workspaces.add(new Workspace("workspace" + workspaces.size(),folders.get(folders.size()-1)));
+      workspaces.add(new Workspace("workspace" + workspaces.size(), folders.get(folders.size()-1)));
+    }
+
+    for (int i = 0; i < maskGraphics.size(); i++)
+    {
+      maskGraphics.get(i).Update();
+    }
+
+    maxScroll = (int)constrain((size.y-explorerBarHeight)-contentSize, -100000, 0);
+
+    CheckContentSize();
+    slider.contentSize = contentSize;
+
+    if (slider.HandleHeld())
+    {
+      areaOffset = (int)(maxScroll*slider.GetHandleScrollMargin());
     }
   }
 
   //==================================================FUNCTIONS================================
+  void ScrollArea(int amount)
+  {
+    if (!slider.HandleHeld())
+    {
+      PVector mp = globals.GetMouseHudPos();
+      if (mp.x > pos.x+sliderWidth && mp.x < pos.x+size.x && mp.y > pos.y && mp.y < pos.y+size.y)
+      {
+        areaOffset -= amount * scrollSpeed;
+        areaOffset = (int)constrain(areaOffset, maxScroll, 0);
+        slider.UpdateHandlePosition((float)areaOffset/(float)maxScroll);
+      }
+    }
+  }
+
+  void CheckContentSize()
+  {
+    int maxy = 0;
+    for (int i = 0; i < maskGraphics.size(); i++)
+    {
+      MaskGraphic mg = maskGraphics.get(i);
+      float myReach = mg.pos.y+mg.size.y;
+      if (myReach > maxy)
+      {
+        maxy = (int)myReach;
+      }
+    }
+    contentSize = maxy;
+  }
+
   void ShowButtons()
   {
     addFolderButton.Show();
@@ -95,21 +161,38 @@ class HUDConExplorer extends HUDItem
       onWindow = true;
     }
   }
+}
 
-  //==================================================CLASSES================================
-  class MaskGraphic
+//==================================================CLASSES================================
+class MaskGraphic
+{
+  PGraphics mask;
+  PVector pos = new PVector(0, 0);
+  PVector size = new PVector(0, 0);
+  MaskGraphic(int _x, int _y, int _w, int _h, PGraphics _mask)
   {
-    PGraphics mask;
-    PVector gpos = new PVector(0, 0);
-    PVector gsize = new PVector(0, 0);
-    MaskGraphic(PGraphics m)
-    {
-      mask = m;
-    }
+    pos.x = _x;
+    pos.y = _y;
+    size.x = _w;
+    size.y = _h;
+    mask = _mask;
+  }
 
-    void Show() {
-    };
-    void Update() {
-    };
+  void Show(int offset) {
+  };
+  void Update() {
+  };
+}
+
+class SimpleMaskGraphic extends MaskGraphic
+{
+  SimpleMaskGraphic(int _x, int _y, int _w, int _h, PGraphics _mask)
+  {
+    super(_x, _y, _w, _h, _mask);
+  }
+
+  void Show(int offset)
+  {
+    mask.rect(pos.x, pos.y+offset, size.x, size.y);
   }
 }

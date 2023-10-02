@@ -24,10 +24,11 @@ class HUD
 
   HUD()
   {
+    int WHOneP = height/100;
     int mainmenuwidth = 350;
     int menubars = 20;
     int menux  = 0, menuy  = 0, menuw  = mainmenuwidth, menuh  = 80, menubm  = menubars;
-    int cmenux = 0, cmenuy = 0+menuh, cmenuw = mainmenuwidth, cmenuh = 500, cmenubm = menubars;
+    int cmenux = 0, cmenuy = 0+menuh, cmenuw = mainmenuwidth, cmenuh = WHOneP * 45, cmenubm = menubars;
     int nmenux = 0, nmenuy = 0+menuh+cmenuh, nmenuw = mainmenuwidth, nmenuh = height-menuh-cmenuh, nmenubm = menubars;
     int dmenux = width-200, dmenuy = 0, dmenuw = 200, dmenuh = 500, dmenubm = menubars;
 
@@ -48,7 +49,7 @@ class HUD
     mainDivider   = menu.AddHUDHDivider(50);
 
     //================================Conversationmenu=====================================
-    explorer            = conversationMenu.AddHUDConExplorer(0, 0, cmenuw, 460);
+    explorer            = conversationMenu.AddHUDConExplorer(0, 0, cmenuw, cmenuh-20);
     conversationDivider = conversationMenu.AddHUDHDivider(470);
 
     //================================Nodemenu=============================================

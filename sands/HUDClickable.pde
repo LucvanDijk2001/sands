@@ -9,22 +9,30 @@ class HUDClickable extends HUDItem
 
   boolean pressed, down, released;
   PVector mouseOffset;
+  
+  color itemColor;
+  color itemHeldColor;
 
   //========================================INIT==============================//
   HUDClickable(int x, int y, int w, int h, HUDMenu menu)
   {
     super(menu);
-    mouseOffset = new PVector(0,0);
-    pos = new PVector(x, y);
-    size = new PVector(w, h);
+    Constructor(x,y,w,h,0,0,menu);
   }
   
   HUDClickable(int x, int y, int w, int h, int mox, int moy, HUDMenu menu)
   {
     super(menu);
+     Constructor(x,y,w,h,mox,moy,menu);
+  }
+
+  void Constructor(int x, int y, int w, int h, int mox, int moy, HUDMenu menu)
+  {
     mouseOffset = new PVector(mox,moy);
     pos = new PVector(x, y);
     size = new PVector(w, h);
+    itemColor = globals.HUDItemColor;
+    itemHeldColor = globals.HUDItemHeldColor;
   }
 
   //========================================MAIN==============================//
@@ -32,10 +40,10 @@ class HUDClickable extends HUDItem
   {
     if (held)
     {
-      fill(globals.HUDItemHeldColor);
+      fill(itemHeldColor);
     } else
     {
-      fill(globals.HUDItemColor);
+      fill(itemColor);
     }
 
     if (hover)
@@ -57,6 +65,16 @@ class HUDClickable extends HUDItem
   }
 
   //========================================FUNCTIONS==============================//
+  void SetItemColor(color c)
+  {
+    itemColor = c;
+  }
+  
+  void SetItemHeldColor(color c)
+  {
+    itemHeldColor = c;
+  }
+  
   boolean CheckHover()
   {
     PVector mousePos = PVector.sub(globals.GetMouseHudPos(),mouseOffset);

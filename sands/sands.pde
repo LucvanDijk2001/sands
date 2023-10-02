@@ -76,6 +76,8 @@ void mouseWheel(MouseEvent event)
   {
     currentWorkspace.ZoomWorkspace(event.getCount());
   }
+  
+  hud.explorer.ScrollArea(event.getCount());
 }
 
 void ChangeWorkspace(int workspaceID)
