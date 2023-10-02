@@ -84,7 +84,6 @@ class HUDSliderHandle extends HUDClickable
   
   void SetHandleMargin(float _margin)
   {
-    print(_margin+"\n");
     pos.y = (parent.size.y-size.y)*_margin + parent.pos.y;
   }
 }

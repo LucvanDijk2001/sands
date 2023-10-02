@@ -56,7 +56,7 @@ class HUDConExplorer extends HUDItem
 
 
     f1 = new MaskFolder(0, 0, 100, 20, mask, this);
-    f2 = new MaskFolder(0, 100, 100, 30, mask, this);
+    f2 = new MaskFolder(0, 1000, 100, 30, mask, this);
     maskGraphics.add(f1);
     maskGraphics.add(f2);
   }
@@ -142,7 +142,7 @@ class HUDConExplorer extends HUDItem
         maxy = (int)myReach;
       }
     }
-    contentSize = maxy;
+    contentSize = maxy+ 50;
   }
 
   void ShowButtons()
