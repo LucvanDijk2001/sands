@@ -39,6 +39,7 @@ class HUDConExplorer extends HUDItem
   SimpleMaskGraphic g1;
   SimpleMaskGraphic g2;
   SimpleMaskGraphic g3;
+  MaskFolder f1;
 
   //==================================================CONSTRUCT================================
   HUDConExplorer(int x, int y, int w, int h, HUDMenu menu)
@@ -55,12 +56,14 @@ class HUDConExplorer extends HUDItem
     addConversationButton = new HUDButton((int)menu.pos.x+(int)menu.size.x/2, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2, explorerBarHeight, "add conversation", menu);
     slider                = new HUDSlider((int)menu.pos.x, (int)menu.pos.y+explorerBarHeight+(int)menu.barMargin, sliderWidth, (int)menu.size.y-explorerBarHeight-(int)menu.barMargin, menu);
 
-    g1 = new SimpleMaskGraphic(0, 0, 100, 100, mask);
-    g2 = new SimpleMaskGraphic(0, 350, 100, 100, mask);
-    g3 = new SimpleMaskGraphic(200, 450, 50, 200, mask);
+    g1 = new SimpleMaskGraphic(0, 0, 100, 100, mask, this);
+    g2 = new SimpleMaskGraphic(0, 350, 100, 100, mask, this);
+    g3 = new SimpleMaskGraphic(200, 450, 50, 200, mask, this);
+    f1 = new MaskFolder(100,100,100,50,mask,this);
     maskGraphics.add(g1);
     maskGraphics.add(g2);
     maskGraphics.add(g3);
+    maskGraphics.add(f1);
   }
 
   //==================================================UPDATE================================
@@ -169,13 +172,15 @@ class MaskGraphic
   PGraphics mask;
   PVector pos = new PVector(0, 0);
   PVector size = new PVector(0, 0);
-  MaskGraphic(int _x, int _y, int _w, int _h, PGraphics _mask)
+  HUDConExplorer owner;
+  MaskGraphic(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
   {
     pos.x = _x;
     pos.y = _y;
     size.x = _w;
     size.y = _h;
     mask = _mask;
+    owner = _owner;
   }
 
   void Show(int offset) {
@@ -184,11 +189,56 @@ class MaskGraphic
   };
 }
 
+class MaskFolder extends MaskClickable
+{
+  String folderName = "Folder";
+  boolean open = false;
+  
+  MaskFolder(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
+  {
+    super(_x, _y, _w, _h, _mask, _owner);
+  }
+  
+  void Show(int offset)
+  {
+    if (hover && hoverEnabled)
+    {
+      mask.stroke(globals.HUDHoverStroke);
+    } else
+    {
+      mask.stroke(globals.HUDStroke);
+    }
+    
+    if (open)
+    {
+      mask.fill(itemHeldColor);
+    } else
+    {
+      mask.fill(itemColor);
+    }
+ 
+    mask.rect(pos.x, pos.y+offset, size.x, size.y, 5);
+    mask.fill(globals.HUDTextColor);
+    
+    mask.textAlign(LEFT,CENTER);
+    mask.text(folderName,pos.x+10,pos.y+size.y/2);
+  }
+  
+  void Update()
+  {
+   super.Update(); 
+   if(Released())
+   {
+    open = !open; 
+   }
+  }
+}
+
 class SimpleMaskGraphic extends MaskGraphic
 {
-  SimpleMaskGraphic(int _x, int _y, int _w, int _h, PGraphics _mask)
+  SimpleMaskGraphic(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
   {
-    super(_x, _y, _w, _h, _mask);
+    super(_x, _y, _w, _h, _mask, _owner);
   }
 
   void Show(int offset)
