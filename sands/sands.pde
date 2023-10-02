@@ -38,6 +38,7 @@ void draw()
 
   //HUD calls
   hud.Show();
+  CheckOnMenu();
 }
 
 void MakeDefaultProject()
@@ -49,17 +50,18 @@ void MakeDefaultProject()
   currentWorkspace = workspaces.get(0);
 }
 
-void mouseWheel(MouseEvent event)
+void CheckOnMenu()
 {
-  boolean doZoom = true;
   PVector mousePos = globals.GetMouseHudPos();
-
+   globals.mouseOverMenu = false;;
+  
   for (int i = 0; i < hud.menus.size(); i++)
   {
     HUDMenu currentMenu = hud.menus.get(i);
     if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
     {
-      doZoom = false;
+      globals.mouseOverMenu = true;
+      break;
     }
   }
 
@@ -68,11 +70,14 @@ void mouseWheel(MouseEvent event)
     HUDMenu currentMenu = hud.debugMenu;
     if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
     {
-      doZoom = false;
+      globals.mouseOverMenu = true;
     }
   }
+}
 
-  if (doZoom)
+void mouseWheel(MouseEvent event)
+{
+  if (!globals.mouseOverMenu)
   {
     currentWorkspace.ZoomWorkspace(event.getCount());
   }

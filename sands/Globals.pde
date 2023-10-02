@@ -8,6 +8,7 @@ class Globals
   float pnmy;
 
   boolean mouseInUse = false;
+  boolean mouseOverMenu = false;
 
   //hud colors
   color HUDMenuColor = color(140,10,70);

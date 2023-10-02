@@ -72,7 +72,7 @@ class Workspace
       line(n1.pos.x+n1.size.x+amt, n1.pos.y, n2.pos.x-amt, n2.pos.y);
       line(n2.pos.x-amt, n2.pos.y, n2.pos.x, n2.pos.y);
     }
-    
+
     strokeWeight(1);
     //TEMP=======================================
   }
@@ -135,12 +135,15 @@ class Workspace
 
   void PanWorkspace()
   {
-    if (mousePressed)
+    if (!globals.mouseOverMenu)
     {
-      if (mouseButton == RIGHT)
+      if (mousePressed)
       {
-        windowPos.x -= (pmouseX-mouseX)*(1/zoom);
-        windowPos.y -= (pmouseY-mouseY)*(1/zoom);
+        if (mouseButton == RIGHT)
+        {
+          windowPos.x -= (pmouseX-mouseX)*(1/zoom);
+          windowPos.y -= (pmouseY-mouseY)*(1/zoom);
+        }
       }
     }
   }
