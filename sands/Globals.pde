@@ -42,6 +42,7 @@ class Globals
     nmy = ((mouseY-(currentWorkspace.windowPos.y*currentWorkspace.zoom))-height/2)/currentWorkspace.zoom;
     pnmx = ((pmouseX-(currentWorkspace.windowPos.x*currentWorkspace.zoom))-width/2)/currentWorkspace.zoom;
     pnmy = ((pmouseY-(currentWorkspace.windowPos.y*currentWorkspace.zoom))-height/2)/currentWorkspace.zoom;
+    CheckMouseOnMenu();
   }
   
   PVector GetMousePos()
@@ -85,4 +86,29 @@ class Globals
      }
      return false;
   }
+  
+  void CheckMouseOnMenu()
+{
+  PVector mousePos = GetMouseHudPos();
+   mouseOverMenu = false;;
+  
+  for (int i = 0; i < hud.menus.size(); i++)
+  {
+    HUDMenu currentMenu = hud.menus.get(i);
+    if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
+    {
+      mouseOverMenu = true;
+      break;
+    }
+  }
+
+  if (debug)
+  {
+    HUDMenu currentMenu = hud.debugMenu;
+    if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
+    {
+      mouseOverMenu = true;
+    }
+  }
+}
 }

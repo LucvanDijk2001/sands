@@ -36,10 +36,8 @@ class HUDConExplorer extends HUDItem
   //explorer graphic
   PGraphics mask;
   ArrayList<MaskGraphic> maskGraphics = new ArrayList<MaskGraphic>();
-  SimpleMaskGraphic g1;
-  SimpleMaskGraphic g2;
-  SimpleMaskGraphic g3;
   MaskFolder f1;
+  MaskFolder f2;
 
   //==================================================CONSTRUCT================================
   HUDConExplorer(int x, int y, int w, int h, HUDMenu menu)
@@ -56,14 +54,11 @@ class HUDConExplorer extends HUDItem
     addConversationButton = new HUDButton((int)menu.pos.x+(int)menu.size.x/2, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2, explorerBarHeight, "add conversation", menu);
     slider                = new HUDSlider((int)menu.pos.x, (int)menu.pos.y+explorerBarHeight+(int)menu.barMargin, sliderWidth, (int)menu.size.y-explorerBarHeight-(int)menu.barMargin, menu);
 
-    g1 = new SimpleMaskGraphic(0, 0, 100, 100, mask, this);
-    g2 = new SimpleMaskGraphic(0, 350, 100, 100, mask, this);
-    g3 = new SimpleMaskGraphic(200, 450, 50, 200, mask, this);
-    f1 = new MaskFolder(100,1300,100,50,mask,this);
-    maskGraphics.add(g1);
-    maskGraphics.add(g2);
-    maskGraphics.add(g3);
+
+    f1 = new MaskFolder(0, 0, 100, 20, mask, this);
+    f2 = new MaskFolder(0, 100, 100, 30, mask, this);
     maskGraphics.add(f1);
+    maskGraphics.add(f2);
   }
 
   //==================================================UPDATE================================
@@ -127,7 +122,10 @@ class HUDConExplorer extends HUDItem
       {
         areaOffset -= amount * scrollSpeed;
         areaOffset = (int)constrain(areaOffset, maxScroll, 0);
-        slider.UpdateHandlePosition((float)areaOffset/(float)maxScroll);
+        if (areaOffset < 0)
+        {
+          slider.UpdateHandlePosition((float)areaOffset/(float)maxScroll);
+        }
       }
     }
   }
@@ -193,12 +191,12 @@ class MaskFolder extends MaskClickable
 {
   String folderName = "Folder";
   boolean open = false;
-  
+
   MaskFolder(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
   {
     super(_x, _y, _w, _h, _mask, _owner);
   }
-  
+
   void Show(int offset)
   {
     if (hover && hoverEnabled)
@@ -208,7 +206,7 @@ class MaskFolder extends MaskClickable
     {
       mask.stroke(globals.HUDStroke);
     }
-    
+
     if (open)
     {
       mask.fill(itemHeldColor);
@@ -216,21 +214,21 @@ class MaskFolder extends MaskClickable
     {
       mask.fill(itemColor);
     }
- 
+
     mask.rect(pos.x, pos.y+offset, size.x, size.y, 5);
     mask.fill(globals.HUDTextColor);
-    
-    mask.textAlign(LEFT,CENTER);
-    mask.text(folderName,pos.x+10,(pos.y+size.y/2)+offset);
+
+    mask.textAlign(LEFT, CENTER);
+    mask.text(folderName, pos.x+10, (pos.y+size.y/2)+offset);
   }
-  
+
   void Update()
   {
-   super.Update(); 
-   if(Released())
-   {
-    open = !open; 
-   }
+    super.Update(); 
+    if (Released())
+    {
+      open = !open;
+    }
   }
 }
 

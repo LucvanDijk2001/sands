@@ -38,7 +38,6 @@ void draw()
 
   //HUD calls
   hud.Show();
-  CheckOnMenu();
 }
 
 void MakeDefaultProject()
@@ -48,31 +47,6 @@ void MakeDefaultProject()
   workspaces.add(new Workspace("workspace1", defaultFolder));
   workspaces.add(new Workspace("workspace2", defaultFolder));
   currentWorkspace = workspaces.get(0);
-}
-
-void CheckOnMenu()
-{
-  PVector mousePos = globals.GetMouseHudPos();
-   globals.mouseOverMenu = false;;
-  
-  for (int i = 0; i < hud.menus.size(); i++)
-  {
-    HUDMenu currentMenu = hud.menus.get(i);
-    if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
-    {
-      globals.mouseOverMenu = true;
-      break;
-    }
-  }
-
-  if (debug)
-  {
-    HUDMenu currentMenu = hud.debugMenu;
-    if (mousePos.x > currentMenu.pos.x && mousePos.x < currentMenu.pos.x+currentMenu.size.x && mousePos.y > currentMenu.pos.y && mousePos.y < currentMenu.pos.y+currentMenu.size.y)
-    {
-      globals.mouseOverMenu = true;
-    }
-  }
 }
 
 void mouseWheel(MouseEvent event)
