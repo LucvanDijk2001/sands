@@ -15,13 +15,13 @@ void setup()
   smooth(2);
   colorMode(HSB);
   
+  //default
+  MakeDefaultProject();
+  
   //program
   globals = new Globals();
   hud = new HUD();
   textAlign(LEFT, CENTER);
-  
-  //default
-  MakeDefaultProject();
 }
 
 void draw()
@@ -44,6 +44,11 @@ void MakeDefaultProject()
 {
   WorkspaceFolder defaultFolder = new WorkspaceFolder("default");
   folders.add(defaultFolder);
+  
+  for(int i = 0; i < 10; i++)
+  {
+   folders.add(new WorkspaceFolder("folder" + str(i))); 
+  }
   workspaces.add(new Workspace("workspace1", defaultFolder));
   workspaces.add(new Workspace("workspace2", defaultFolder));
   currentWorkspace = workspaces.get(0);

@@ -36,9 +36,9 @@ class HUDConExplorer extends HUDItem
   //explorer graphic
   PGraphics mask;
   ArrayList<MaskGraphic> maskGraphics = new ArrayList<MaskGraphic>();
-  MaskFolder f1;
-  MaskFolder f2;
-
+  
+  SimpleMaskGraphic g1;
+  SimpleMaskClickable g2;
   //==================================================CONSTRUCT================================
   HUDConExplorer(int x, int y, int w, int h, HUDMenu menu)
   {
@@ -53,12 +53,12 @@ class HUDConExplorer extends HUDItem
     addFolderButton       = new HUDButton((int)menu.pos.x, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2-1, explorerBarHeight, "add folder", menu);
     addConversationButton = new HUDButton((int)menu.pos.x+(int)menu.size.x/2, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2, explorerBarHeight, "add conversation", menu);
     slider                = new HUDSlider((int)menu.pos.x, (int)menu.pos.y+explorerBarHeight+(int)menu.barMargin, sliderWidth, (int)menu.size.y-explorerBarHeight-(int)menu.barMargin, menu);
-
-
-    f1 = new MaskFolder(0, 0, 100, 20, mask, this);
-    f2 = new MaskFolder(0, 1000, 100, 30, mask, this);
-    maskGraphics.add(f1);
-    maskGraphics.add(f2);
+    
+    g1 = new SimpleMaskGraphic(0,600,100,100,mask,this);
+    g2 = new SimpleMaskClickable(0,120,100,30,mask,this);
+    
+    maskGraphics.add(g1);
+    maskGraphics.add(g2);
   }
 
   //==================================================UPDATE================================
@@ -88,7 +88,8 @@ class HUDConExplorer extends HUDItem
   {
     if (addFolderButton.Released())
     {
-      folders.add(new WorkspaceFolder("folder" + folders.size()));
+      WorkspaceFolder newFolder = new WorkspaceFolder("folder" + folders.size());
+      folders.add(newFolder);
     }
 
     if (addConversationButton.Released())
@@ -136,10 +137,13 @@ class HUDConExplorer extends HUDItem
     for (int i = 0; i < maskGraphics.size(); i++)
     {
       MaskGraphic mg = maskGraphics.get(i);
-      float myReach = mg.pos.y+mg.size.y;
-      if (myReach > maxy)
+      if (mg.enabled)
       {
-        maxy = (int)myReach;
+        float myReach = mg.pos.y+mg.size.y;
+        if (myReach > maxy)
+        {
+          maxy = (int)myReach;
+        }
       }
     }
     contentSize = maxy+ 50;
@@ -168,6 +172,7 @@ class HUDConExplorer extends HUDItem
 class MaskGraphic
 {
   PGraphics mask;
+  boolean enabled = true;
   PVector pos = new PVector(0, 0);
   PVector size = new PVector(0, 0);
   HUDConExplorer owner;
@@ -187,51 +192,6 @@ class MaskGraphic
   };
 }
 
-class MaskFolder extends MaskClickable
-{
-  String folderName = "Folder";
-  boolean open = false;
-
-  MaskFolder(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
-  {
-    super(_x, _y, _w, _h, _mask, _owner);
-  }
-
-  void Show(int offset)
-  {
-    if (hover && hoverEnabled)
-    {
-      mask.stroke(globals.HUDHoverStroke);
-    } else
-    {
-      mask.stroke(globals.HUDStroke);
-    }
-
-    if (open)
-    {
-      mask.fill(itemHeldColor);
-    } else
-    {
-      mask.fill(itemColor);
-    }
-
-    mask.rect(pos.x, pos.y+offset, size.x, size.y, 5);
-    mask.fill(globals.HUDTextColor);
-
-    mask.textAlign(LEFT, CENTER);
-    mask.text(folderName, pos.x+10, (pos.y+size.y/2)+offset);
-  }
-
-  void Update()
-  {
-    super.Update(); 
-    if (Released())
-    {
-      open = !open;
-    }
-  }
-}
-
 class SimpleMaskGraphic extends MaskGraphic
 {
   SimpleMaskGraphic(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
@@ -242,5 +202,23 @@ class SimpleMaskGraphic extends MaskGraphic
   void Show(int offset)
   {
     mask.rect(pos.x, pos.y+offset, size.x, size.y);
+  }
+}
+
+class SimpleMaskClickable extends MaskClickable
+{
+  SimpleMaskClickable(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
+  {
+    super(_x, _y, _w, _h, _mask, _owner);
+  }
+
+  void Show(int offset)
+  {
+    super.Show(offset);
+  }
+
+  void Update()
+  {
+    super.Update();
   }
 }

@@ -1,6 +1,6 @@
 class MaskClickable extends MaskGraphic
 {
-    //========================================VALUES==============================//
+  //========================================VALUES==============================//
   boolean hover = false;
   boolean hoverEnabled = true;
   boolean keepHoverOnHeld = true;
@@ -8,8 +8,13 @@ class MaskClickable extends MaskGraphic
   boolean held = false;
   boolean mouseDown = false;
 
-  boolean pressed, down, released;
-  PVector mouseOffset = new PVector(0,0);
+  boolean pressed, down, released, missed;
+  PVector mouseOffset = new PVector(0, 0);
+
+  int clickMarginLeft = 0;
+  int clickMarginRight = 0;
+  int clickMarginTop = 0;
+  int clickMarginBottom = 0;
 
   color itemColor;
   color itemHeldColor;
@@ -17,14 +22,14 @@ class MaskClickable extends MaskGraphic
   //========================================INIT==============================//
   MaskClickable(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
   {
-    super(_x,_y,_w,_h,_mask,_owner);
+    super(_x, _y, _w, _h, _mask, _owner);
     mouseOffset.x = _owner.menu.pos.x+_owner.sliderWidth;
     mouseOffset.y = _owner.menu.pos.y+_owner.menu.barMargin+_owner.explorerBarHeight;
     itemColor = globals.HUDItemColor;
     itemHeldColor = globals.HUDItemHeldColor;
   }
-  
-   //========================================MAIN==============================//
+
+  //========================================MAIN==============================//
   void Show(int offset)
   {
     if (hover && hoverEnabled)
@@ -34,11 +39,11 @@ class MaskClickable extends MaskGraphic
     {
       mask.stroke(globals.HUDStroke);
     }
-    
+
     if (held)
     {
       mask.fill(itemHeldColor);
-      if(!keepHoverOnHeld)
+      if (!keepHoverOnHeld)
       {
         mask.stroke(globals.HUDStroke);
       }
@@ -46,7 +51,7 @@ class MaskClickable extends MaskGraphic
     {
       mask.fill(itemColor);
     }
- 
+
     mask.rect(pos.x, pos.y+offset, size.x, size.y, 5);
     mask.fill(globals.HUDTextColor);
   }
@@ -59,6 +64,26 @@ class MaskClickable extends MaskGraphic
   }
 
   //========================================FUNCTIONS==============================//
+  void SetClickMarginLeft(int m)
+  {
+    clickMarginLeft = m;
+  }
+
+  void SetClickMarginRight(int m)
+  {
+    clickMarginRight = m;
+  }
+
+  void SetClickMarginTop(int m)
+  {
+    clickMarginTop = m;
+  }
+
+  void SetClickMarginBottom(int m)
+  {
+    clickMarginBottom = m;
+  }
+
   void SetKeepHoverOnHeld(boolean b)
   {
     keepHoverOnHeld = b;
@@ -84,7 +109,7 @@ class MaskClickable extends MaskGraphic
     int offset = owner.areaOffset;
     PVector mousePos = PVector.sub(globals.GetMouseHudPos(), mouseOffset);
 
-    if (mousePos.x > pos.x-1 && mousePos.x < pos.x+size.x && mousePos.y > pos.y-1+offset && mousePos.y < pos.y+size.y+offset)
+    if (mousePos.x > pos.x-1+clickMarginLeft && mousePos.x < pos.x+size.x-clickMarginRight && mousePos.y > pos.y-1+offset+clickMarginTop && mousePos.y < pos.y+size.y+offset-clickMarginBottom)
     {
       return true;
     }
@@ -105,6 +130,9 @@ class MaskClickable extends MaskGraphic
             held = true;
             pressed = true;
           }
+        } else
+        {
+          missed = true;
         }
       } else
       {
@@ -112,6 +140,7 @@ class MaskClickable extends MaskGraphic
       }
     } else
     {
+      missed = false;
       mouseDown = false; 
       pressed =  false;
     }
@@ -137,5 +166,8 @@ class MaskClickable extends MaskGraphic
   }
   boolean Released() {
     return released;
+  }
+  boolean Missed() {
+    return missed;
   }
 }
