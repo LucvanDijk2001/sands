@@ -59,7 +59,7 @@ class HUDConExplorer extends HUDItem
     g1 = new SimpleMaskGraphic(0, 0, 100, 100, mask, this);
     g2 = new SimpleMaskGraphic(0, 350, 100, 100, mask, this);
     g3 = new SimpleMaskGraphic(200, 450, 50, 200, mask, this);
-    f1 = new MaskFolder(100,100,100,50,mask,this);
+    f1 = new MaskFolder(100,1300,100,50,mask,this);
     maskGraphics.add(g1);
     maskGraphics.add(g2);
     maskGraphics.add(g3);
@@ -221,7 +221,7 @@ class MaskFolder extends MaskClickable
     mask.fill(globals.HUDTextColor);
     
     mask.textAlign(LEFT,CENTER);
-    mask.text(folderName,pos.x+10,pos.y+size.y/2);
+    mask.text(folderName,pos.x+10,(pos.y+size.y/2)+offset);
   }
   
   void Update()
