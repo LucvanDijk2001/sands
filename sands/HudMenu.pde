@@ -9,6 +9,7 @@ class HUDMenu
   ArrayList<HUDItem> HUDItems;
   boolean isExitMenu = false;
   HUDButton exitButton;
+  HUDToggable debugToggle;
 
   //===================================INIT=========================//
   HUDMenu(int x, int y, int w, int h, int bm, String t, boolean IsExitMenu)
@@ -23,6 +24,7 @@ class HUDMenu
     if (isExitMenu)
     {
       exitButton = new HUDButton(0, 0, 20, 20, "X", this);
+      debugToggle = new HUDToggable((int)size.x-20,0,20,20,"Debug",true,this);
     }
   }
 
@@ -40,7 +42,7 @@ class HUDMenu
     {
       text(title, pos.x+30, pos.y+barMargin/2);
       exitButton.Show();
-      exitButton.Update();
+      debugToggle.Show();
     } else
     {
       text(title, pos.x+10, pos.y+barMargin/2);
@@ -58,6 +60,9 @@ class HUDMenu
 
     if (isExitMenu)
     {
+      exitButton.Update();
+      debugToggle.Update();
+      debug = debugToggle.GetToggled();
       if (exitButton.Released())
       {
         //launch("%windir%/explorer.exe shell:::{3080F90D-D7AD-11D9-BD98-0000947B0257}");
@@ -100,25 +105,18 @@ class HUDMenu
     return button;
   }
 
-  HUDButton AddHUDButton(int x, int y, int w, int h, String title, int mox, int moy)
-  {
-    HUDButton button = new HUDButton(x, y, w, h, title, mox, moy, this);
-    AddHUDItem(button);
-    return button;
-  }
-
   HUDHDivider AddHUDHDivider(int m)
   {
-    HUDHDivider divier = new HUDHDivider(m, this);
-    AddHUDItem(divier);
-    return divier;
+    HUDHDivider divider = new HUDHDivider(m, this);
+    AddHUDItem(divider);
+    return divider;
   }
 
   HUDVDivider AddHUDVDivider(int m)
   {
-    HUDVDivider divier = new HUDVDivider(m, this);
-    AddHUDItem(divier);
-    return divier;
+    HUDVDivider divider = new HUDVDivider(m, this);
+    AddHUDItem(divider);
+    return divider;
   }
 
   HUDConExplorer AddHUDConExplorer(int x, int y, int w, int h)
@@ -126,6 +124,13 @@ class HUDMenu
     HUDConExplorer explorer = new HUDConExplorer(x, y, w, h, this);
     AddHUDItem(explorer);
     return explorer;
+  }
+
+  HUDToggable AddHUDToggable(int x, int y, int w, int h, String name)
+  {
+    HUDToggable toggable = new HUDToggable(x, y, w, h,name, this);
+    AddHUDItem(toggable);
+    return toggable;
   }
 
   private void AddHUDItem(HUDItem item)

@@ -22,12 +22,6 @@ class HUDClickable extends HUDItem
     Constructor(x, y, w, h, 0, 0, menu);
   }
 
-  HUDClickable(int x, int y, int w, int h, int mox, int moy, HUDMenu menu)
-  {
-    super(menu);
-    Constructor(x, y, w, h, mox, moy, menu);
-  }
-
   void Constructor(int x, int y, int w, int h, int mox, int moy, HUDMenu menu)
   {
     mouseOffset = new PVector(mox, moy);

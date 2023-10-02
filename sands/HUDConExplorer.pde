@@ -39,6 +39,7 @@ class HUDConExplorer extends HUDItem
   
   SimpleMaskGraphic g1;
   SimpleMaskClickable g2;
+  MaskToggable t1;
   //==================================================CONSTRUCT================================
   HUDConExplorer(int x, int y, int w, int h, HUDMenu menu)
   {
@@ -56,9 +57,11 @@ class HUDConExplorer extends HUDItem
     
     g1 = new SimpleMaskGraphic(0,600,100,100,mask,this);
     g2 = new SimpleMaskClickable(0,120,100,30,mask,this);
-    
+    t1 = new MaskToggable(100,800,20,20,"masktoggle",true,mask,this);
+
     maskGraphics.add(g1);
     maskGraphics.add(g2);
+    maskGraphics.add(t1);
   }
 
   //==================================================UPDATE================================

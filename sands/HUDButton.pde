@@ -9,12 +9,6 @@ class HUDButton extends HUDClickable
     super(x,y,w,h,menu);
     title = text;
   }
-  
-  HUDButton(int x, int y, int w, int h, String text, int mox, int moy, HUDMenu menu)
-  {
-    super(x,y,w,h,mox,moy, menu);
-    title = text;
-  }
 
   //========================================MAIN==============================//
   void Show()

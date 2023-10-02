@@ -73,6 +73,6 @@ void keyPressed()
 {
   if (key == 'p')
   {
-    debug = !debug;
+    //debug = !debug;
   }
 }
