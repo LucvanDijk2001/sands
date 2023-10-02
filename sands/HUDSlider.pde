@@ -15,6 +15,7 @@ class HUDSlider extends HUDItem
     handle = new HUDSliderHandle(_x, _y, _w, 50,this, menu);
     handle.SetItemColor(globals.HUDSliderHandleColor);
     handle.SetItemHeldColor(globals.HUDSliderHandleHeldColor);
+    handle.SetKeepHoverOnHeld(false);
   }
 
   void Show()
