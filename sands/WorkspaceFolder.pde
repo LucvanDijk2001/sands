@@ -36,4 +36,16 @@ class WorkspaceFolder
       print("  - " + workspaces.get(i).workspaceName + "\n");
     }
   }
+  
+  Workspace GetWorkspace(String name)
+  {
+    for(int i = 0; i < workspaces.size(); i++)
+    {
+     if(workspaces.get(i).workspaceName == name)
+     {
+      return workspaces.get(i); 
+     }
+    }
+   return null; 
+  }
 }

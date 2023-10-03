@@ -99,13 +99,13 @@ class HUD
   {
     //live hud items
     debugMenu.ShowText(10, 10, "workspace: " + currentWorkspace.workspaceName,color(30,220,240));
-    debugMenu.ShowText(10, 25, "workspacesition x: " + round(currentWorkspace.windowPos.x * -1),color(30,220,240));
+    debugMenu.ShowText(10, 35, "workspacesition x: " + round(currentWorkspace.windowPos.x * -1),color(30,220,240));
     debugMenu.ShowText(10, 50, "workspace position y: " + round(currentWorkspace.windowPos.y * -1),color(30,220,240));
     debugMenu.ShowText(10, 65, "workspace zoom: " + nf(currentWorkspace.zoom, 0, 1),color(30,220,240));
     debugMenu.ShowText(10, 80, "Nodes in workspace: " + currentWorkspace.nodes.size(),color(30,220,240));
     
-    debugMenu.ShowText(10, 100, "Folder amount: " + folders.size(), color(70, 200, 200));
-    debugMenu.ShowText(10, 115, "Workspace amount: " + workspaces.size(), color(70, 200, 200));
+    debugMenu.ShowText(10, 105, "Folder amount: " + folders.size(), color(70, 200, 200));
+    debugMenu.ShowText(10, 120, "Workspace amount: " + workspaces.size(), color(70, 200, 200));
 
     debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-55), "Background drawCalls: " + currentWorkspace.bgDrawCalls, color(30, 200, 200));
     debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-40), "FPS: " + frameRate, color(30, 200, 200));

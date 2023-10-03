@@ -19,6 +19,7 @@ class HUDConExplorer extends HUDItem
   //explorer window
   PVector size = new PVector(0, 0);
   boolean onWindow = false;
+  boolean onExplorer = false;
   int explorerBarHeight = 30;
 
   //explorer bar
@@ -89,6 +90,7 @@ class HUDConExplorer extends HUDItem
   void Show()
   {
     CheckOnWindow();
+    CheckOnExplorer();
     fill(globals.HUDItemDentColor);
     stroke(globals.HUDStroke);
     rect(pos.x, pos.y, size.x, size.y);
@@ -138,10 +140,9 @@ class HUDConExplorer extends HUDItem
       if (areaOffset < 0)
       {
         slider.UpdateHandlePosition((float)areaOffset/(float)maxScroll);
-      }
-      else
+      } else
       {
-       slider.handle.pos.y = slider.pos.y; 
+        slider.handle.pos.y = slider.pos.y;
       }
     }
 
@@ -205,6 +206,15 @@ class HUDConExplorer extends HUDItem
     if (mousePos.x > pos.x && mousePos.x < pos.x+size.x && mousePos.y > pos.y && mousePos.y < pos.y + size.y)
     {
       onWindow = true;
+    }
+  }
+  void CheckOnExplorer()
+  {
+    onExplorer = false;
+    PVector mousePos = globals.GetMouseHudPos();
+    if (mousePos.x > pos.x && mousePos.x < pos.x+size.x && mousePos.y > pos.y+explorerBarHeight && mousePos.y < pos.y + size.y)
+    {
+      onExplorer = true;
     }
   }
 }
@@ -326,7 +336,14 @@ class MaskFolder extends MaskClickable
   void Update()
   {
     size.x = mask.width-pos.x;
-    super.Update();
+    if (owner.onExplorer)
+    {
+      super.Update();
+    }
+    else
+    {
+     hover = false; 
+    }
     if (open)
     {
       for (int i = 0; i < folders.size(); i++)
@@ -371,6 +388,18 @@ class MaskFolderButton extends MaskToggable
     SetOnText("V"); 
     SetOffText(">");
   }
+
+  void Update()
+  {
+    if (owner.onExplorer)
+    {
+      super.Update();
+    }
+    else
+    {
+     hover = false; 
+    }
+  }
 }
 
 class MaskConversation extends MaskClickable
@@ -397,7 +426,14 @@ class MaskConversation extends MaskClickable
 
   void Update()
   {
-    super.Update();
+    if (owner.onExplorer)
+    {
+      super.Update();
+    }
+    else
+    {
+     hover = false; 
+    }
     size.x = mask.width-pos.x;
     if (Released())
     {
