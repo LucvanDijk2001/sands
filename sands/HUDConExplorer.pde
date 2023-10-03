@@ -36,10 +36,11 @@ class HUDConExplorer extends HUDItem
   //explorer graphic
   PGraphics mask;
   ArrayList<MaskGraphic> maskGraphics = new ArrayList<MaskGraphic>();
-  
+
   SimpleMaskGraphic g1;
   SimpleMaskClickable g2;
   MaskToggable t1;
+  MaskVFolderLayout layout;
   //==================================================CONSTRUCT================================
   HUDConExplorer(int x, int y, int w, int h, HUDMenu menu)
   {
@@ -54,16 +55,36 @@ class HUDConExplorer extends HUDItem
     addFolderButton       = new HUDButton((int)menu.pos.x, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2-1, explorerBarHeight, "add folder", menu);
     addConversationButton = new HUDButton((int)menu.pos.x+(int)menu.size.x/2, (int)(menu.pos.y+menu.barMargin), (int)menu.size.x/2, explorerBarHeight, "add conversation", menu);
     slider                = new HUDSlider((int)menu.pos.x, (int)menu.pos.y+explorerBarHeight+(int)menu.barMargin, sliderWidth, (int)menu.size.y-explorerBarHeight-(int)menu.barMargin, menu);
-    
-    g1 = new SimpleMaskGraphic(0,600,100,100,mask,this);
-    g2 = new SimpleMaskClickable(0,120,100,30,mask,this);
-    t1 = new MaskToggable(100,800,20,20,"masktoggle",true,mask,this);
 
-    maskGraphics.add(g1);
-    maskGraphics.add(g2);
-    maskGraphics.add(t1);
+    g1 = new SimpleMaskGraphic(0, 600, 100, 100, mask, this);
+    g2 = new SimpleMaskClickable(0, 120, 100, 30, mask, this);
+    t1 = new MaskToggable(100, 800, 20, 20, "masktoggle", true, mask, this);
+    layout = new MaskVFolderLayout(0,0,mask,this);
+
+    for (int i = 0; i < folders.size(); i++)
+    {
+      MaskFolder folder = new MaskFolder(0, 100+i*100, 100, 20, folders.get(i), mask, this);
+      RecurseCreateFolder(folders.get(i), folder);
+      layout.AddItem(folder);
+    }
+
+    maskGraphics.add(layout);
+    //maskGraphics.add(g2);
+    //maskGraphics.add(t1);
   }
 
+  void RecurseCreateFolder(WorkspaceFolder folder, MaskFolder maskFolder)
+  {
+    if (folder.folders.size() > 0)
+    {
+      for (int i = 0; i < folder.folders.size(); i++)
+      {
+        MaskFolder newMaskFolder = new MaskFolder(0, 0, 100, 20, folder.folders.get(i), mask, this);
+        maskFolder.folders.add(newMaskFolder);
+        RecurseCreateFolder(folder.folders.get(i), newMaskFolder);
+      }
+    }
+  }
   //==================================================UPDATE================================
   void Show()
   {
@@ -193,6 +214,174 @@ class MaskGraphic
   };
   void Update() {
   };
+}
+
+class MaskVFolderLayout extends MaskGraphic
+{
+  ArrayList<MaskFolder> items = new ArrayList<MaskFolder>();
+  MaskVFolderLayout(int _x, int _y, PGraphics _mask, HUDConExplorer _owner)
+  {
+    super(_x, _y, 0, 0, _mask, _owner);
+  }
+
+  void Show(int offset)
+  {
+    for (int i = 0; i < items.size(); i++)
+    {
+      items.get(i).Show(offset);
+    }
+  }
+
+  void Update()
+  {
+    int newPos=0;
+    for (int i = 0; i < items.size(); i++)
+    {
+      items.get(i).Update();
+      items.get(i).pos.x = pos.x;
+      items.get(i).pos.y = pos.y + newPos;
+      newPos += items.get(i).CalculateSize();
+    }
+  }
+
+  void AddItem(MaskFolder item)
+  {
+    items.add(item);
+  }
+}
+
+class MaskFolder extends MaskClickable
+{
+  WorkspaceFolder connectedFolder;
+  MaskFolderButton button;
+  ArrayList<MaskFolder> folders = new ArrayList<MaskFolder>();
+  ArrayList<MaskConversation> conversations = new ArrayList<MaskConversation>();
+  String folderName = "folder";
+  int sizeY = 0;
+  boolean open = false;
+
+  MaskFolder(int _x, int _y, int _w, int _h, WorkspaceFolder _folder, PGraphics _mask, HUDConExplorer _owner)
+  {
+    super(_x, _y, _w, _h, _mask, _owner); 
+    SetHoverEnabled(false);
+    connectedFolder = _folder;
+    folderName = _folder.folderName;
+    button = new MaskFolderButton(_x, _y, _h, _h, _mask, _owner);
+    SetClickMarginLeft((int)button.size.x);
+
+    for (int i = 0; i < connectedFolder.workspaces.size(); i++)
+    {
+      conversations.add(new MaskConversation(0, 0, 100, 20,connectedFolder.workspaces.get(i), mask, owner));
+    }
+  }
+
+  void Show(int offset)
+  {
+    super.Show(offset);
+    if (open)
+    {
+      PVector itemPos = new PVector(pos.x+20, pos.y+size.y);
+      for (int i = 0; i < folders.size(); i++)
+      {
+        MaskFolder folder = folders.get(i);
+        folder.pos.x = itemPos.x;
+        folder.pos.y = itemPos.y;
+        itemPos.y += folder.size.y;
+        folder.Show(offset);
+        
+      }
+
+      for (int i = 0; i < conversations.size(); i++)
+      {
+        MaskConversation conversation = conversations.get(i);
+        conversation.pos.x = itemPos.x;
+        conversation.pos.y = itemPos.y;
+        itemPos.y += conversation.size.y;
+        conversation.Show(offset);
+        
+      }
+    }
+    mask.textAlign(LEFT, CENTER);
+    mask.text(folderName, pos.x+button.size.x+5, pos.y+size.y/2+offset);
+    button.Show(offset);
+  }
+
+  void Update()
+  {
+    super.Update();
+    if (open)
+    {
+      for (int i = 0; i < folders.size(); i++)
+      {
+        folders.get(i).Update();
+      }
+
+      for (int i = 0; i < conversations.size(); i++)
+      {
+        conversations.get(i).Update();
+      }
+    }
+    open = button.toggled;
+    button.Update();
+    button.pos.x = pos.x;
+    button.pos.y = pos.y;
+  }
+
+  int CalculateSize()
+  {
+    int totalY = (int)size.y;
+    if (open)
+    {
+      for (int i = 0; i < folders.size(); i++)
+      {
+        totalY += folders.get(i).CalculateSize();
+      }
+      for (int i = 0; i < conversations.size(); i++)
+      {
+        totalY += conversations.get(i).size.y;
+      }
+    }
+    return totalY;
+  }
+}
+
+class MaskFolderButton extends MaskToggable
+{
+  MaskFolderButton(int _x, int _y, int _w, int _h, PGraphics _mask, HUDConExplorer _owner)
+  {
+    super(_x, _y, _w, _h, "", _mask, _owner); 
+    SetOnText("V"); 
+    SetOffText(">");
+  }
+}
+
+class MaskConversation extends MaskClickable
+{
+  Workspace connectedWorkspace;
+  String name = "ws";
+  
+  MaskConversation (int _x, int _y, int _w, int _h,Workspace ws, PGraphics _mask, HUDConExplorer _owner)
+  {
+    super(_x, _y, _w, _h, _mask, _owner);
+    connectedWorkspace = ws;
+    name = ws.workspaceName;
+  }
+  
+  void Show(int offset)
+  {
+   super.Show(offset);
+   mask.textAlign(LEFT,CENTER);
+   mask.text(name,pos.x+5,pos.y+size.y/2+offset);
+  }
+  
+  void Update()
+  {
+   super.Update();
+   if(Released())
+   {
+    currentWorkspace = connectedWorkspace; 
+   }
+  }
 }
 
 class SimpleMaskGraphic extends MaskGraphic

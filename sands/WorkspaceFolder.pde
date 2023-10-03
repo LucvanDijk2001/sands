@@ -13,4 +13,26 @@ class WorkspaceFolder
   {
     workspaces.add(ws);
   }
+
+  void PrintContent(int depth)
+  {
+    for (int i = 0; i < depth; i++)
+    {
+      print("  ");
+    }
+    print(folderName + "\n");
+    for (int i = 0; i < folders.size(); i++)
+    {
+      folders.get(i).PrintContent(depth+1);
+    }
+
+    for (int i = 0; i < workspaces.size(); i++)
+    {
+      for (int j = 0; j < depth; j++)
+      {
+        print("  ");
+      }
+      print("  - " + workspaces.get(i).workspaceName + "\n");
+    }
+  }
 }

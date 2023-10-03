@@ -32,8 +32,12 @@ class Node
     rect(pos.x, pos.y, size.x, size.y, 10);
     fill(globals.NodeBarColor);
     rect(pos.x, pos.y, size.x, barMargin, 10, 10, 0, 0);
-    fill(globals.NodeTextColor);
-    text("x:" + round(pos.x) + " - y:" + round(pos.y), pos.x, pos.y-15);
+
+    if (debug)
+    {
+      fill(globals.NodeTextColor);
+      text("x:" + round(pos.x) + " - y:" + round(pos.y), pos.x, pos.y-15);
+    }
 
     fill(255);
     text("Node", pos.x+10, pos.y+barMargin/2);
@@ -62,18 +66,18 @@ class Node
             if (!globals.mouseInUse)
             {
               Node ref = owner.nodes.get(owner.nodes.size()-1);
-              if(ref != this)
+              if (ref != this)
               {
                 int sid = 0;
-                for(int i = 0; i < owner.nodes.size(); i++)
+                for (int i = 0; i < owner.nodes.size(); i++)
                 {
-                  if(owner.nodes.get(i) == this)
+                  if (owner.nodes.get(i) == this)
                   {
-                   sid = i; 
+                    sid = i;
                   }
                 }
-                owner.nodes.set(owner.nodes.size()-1,this);
-                owner.nodes.set(sid,ref);
+                owner.nodes.set(owner.nodes.size()-1, this);
+                owner.nodes.set(sid, ref);
               }
               globals.mouseInUse = true;
               held = true;

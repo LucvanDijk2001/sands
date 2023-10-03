@@ -132,11 +132,7 @@ class HUD
       for (int i = 0; i < folders.size(); i++)
       {
         WorkspaceFolder folder = folders.get(i);
-        print(folder.folderName + "\n");
-        for (int j = 0; j < folder.workspaces.size(); j++)
-        {
-          print("   - " + folder.workspaces.get(j).workspaceName + "\n");
-        }
+        folder.PrintContent(0);
       }
       print("\n\n\n");
     }
