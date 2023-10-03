@@ -59,7 +59,7 @@ class HUDConExplorer extends HUDItem
     g1 = new SimpleMaskGraphic(0, 600, 100, 100, mask, this);
     g2 = new SimpleMaskClickable(0, 120, 100, 30, mask, this);
     t1 = new MaskToggable(100, 800, 20, 20, "masktoggle", true, mask, this);
-    layout = new MaskVFolderLayout(0,0,mask,this);
+    layout = new MaskVFolderLayout(0, 0, mask, this);
 
     for (int i = 0; i < folders.size(); i++)
     {
@@ -113,14 +113,14 @@ class HUDConExplorer extends HUDItem
     if (addFolderButton.Released())
     {
       WorkspaceFolder newFolder = new WorkspaceFolder("folder" + folders.size());
-      layout.AddItem(new MaskFolder(0,0,100,20,newFolder,mask,this));
+      layout.AddItem(new MaskFolder(0, 0, 100, 20, newFolder, mask, this));
       folders.add(newFolder);
     }
 
     if (addConversationButton.Released())
     {
       Workspace newWorkspace = new Workspace("workspace" + workspaces.size(), folders.get(folders.size()-1));
-      MaskConversation mc = new MaskConversation(0,0,100,20,newWorkspace,mask,this);
+      MaskConversation mc = new MaskConversation(0, 0, 100, 20, newWorkspace, mask, this);
       folders.get(folders.size()-1).connectedFolder.conversations.add(mc);
       workspaces.add(newWorkspace);
     }
@@ -131,6 +131,19 @@ class HUDConExplorer extends HUDItem
     }
 
     maxScroll = (int)constrain((size.y-explorerBarHeight)-contentSize, -100000, 0);
+
+    if (areaOffset  > 0 || areaOffset < maxScroll)
+    {
+      areaOffset = (int)constrain(areaOffset, maxScroll, 0);
+      if (areaOffset < 0)
+      {
+        slider.UpdateHandlePosition((float)areaOffset/(float)maxScroll);
+      }
+      else
+      {
+       slider.handle.pos.y = slider.pos.y; 
+      }
+    }
 
     CheckContentSize();
     slider.contentSize = contentSize;
@@ -277,7 +290,7 @@ class MaskFolder extends MaskClickable
 
     for (int i = 0; i < connectedFolder.workspaces.size(); i++)
     {
-      conversations.add(new MaskConversation(0, 0, 100, 20,connectedFolder.workspaces.get(i), mask, owner));
+      conversations.add(new MaskConversation(0, 0, 100, 20, connectedFolder.workspaces.get(i), mask, owner));
     }
   }
 
@@ -303,7 +316,6 @@ class MaskFolder extends MaskClickable
         conversation.pos.y = itemPos.y;
         itemPos.y += conversation.size.y;
         conversation.Show(offset);
-        
       }
     }
     mask.textAlign(LEFT, CENTER);
@@ -365,8 +377,8 @@ class MaskConversation extends MaskClickable
 {
   Workspace connectedWorkspace;
   String name = "ws";
-  
-  MaskConversation (int _x, int _y, int _w, int _h,Workspace ws, PGraphics _mask, HUDConExplorer _owner)
+
+  MaskConversation (int _x, int _y, int _w, int _h, Workspace ws, PGraphics _mask, HUDConExplorer _owner)
   {
     super(_x, _y, _w, _h, _mask, _owner);
     connectedWorkspace = ws;
@@ -375,22 +387,22 @@ class MaskConversation extends MaskClickable
     SetItemColor(globals.MaskConversationColor);
     SetItemHeldColor(globals.MaskConversationHeldColor);
   }
-  
+
   void Show(int offset)
   {
-   super.Show(offset);
-   mask.textAlign(LEFT,CENTER);
-   mask.text(name,pos.x+5,pos.y+size.y/2+offset);
+    super.Show(offset);
+    mask.textAlign(LEFT, CENTER);
+    mask.text(name, pos.x+5, pos.y+size.y/2+offset);
   }
-  
+
   void Update()
   {
-   super.Update();
-   size.x = mask.width-pos.x;
-   if(Released())
-   {
-    currentWorkspace = connectedWorkspace; 
-   }
+    super.Update();
+    size.x = mask.width-pos.x;
+    if (Released())
+    {
+      currentWorkspace = connectedWorkspace;
+    }
   }
 }
 

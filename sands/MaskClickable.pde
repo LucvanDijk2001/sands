@@ -58,9 +58,12 @@ class MaskClickable extends MaskGraphic
 
   void Update()
   {
-    hover = CheckHover();
-    CheckPressed();
-    CheckReleased();
+    if (owner.onWindow)
+    {
+      hover = CheckHover();
+      CheckPressed();
+      CheckReleased();
+    }
   }
 
   //========================================FUNCTIONS==============================//
