@@ -113,12 +113,16 @@ class HUDConExplorer extends HUDItem
     if (addFolderButton.Released())
     {
       WorkspaceFolder newFolder = new WorkspaceFolder("folder" + folders.size());
+      layout.AddItem(new MaskFolder(0,0,100,20,newFolder,mask,this));
       folders.add(newFolder);
     }
 
     if (addConversationButton.Released())
     {
-      workspaces.add(new Workspace("workspace" + workspaces.size(), folders.get(folders.size()-1)));
+      Workspace newWorkspace = new Workspace("workspace" + workspaces.size(), folders.get(folders.size()-1));
+      MaskConversation mc = new MaskConversation(0,0,100,20,newWorkspace,mask,this);
+      folders.get(folders.size()-1).connectedFolder.conversations.add(mc);
+      workspaces.add(newWorkspace);
     }
 
     for (int i = 0; i < maskGraphics.size(); i++)
@@ -242,6 +246,7 @@ class MaskVFolderLayout extends MaskGraphic
       items.get(i).pos.y = pos.y + newPos;
       newPos += items.get(i).CalculateSize();
     }
+    size.y = newPos;
   }
 
   void AddItem(MaskFolder item)
@@ -266,6 +271,7 @@ class MaskFolder extends MaskClickable
     SetHoverEnabled(false);
     connectedFolder = _folder;
     folderName = _folder.folderName;
+    _folder.connectedFolder = this;
     button = new MaskFolderButton(_x, _y, _h, _h, _mask, _owner);
     SetClickMarginLeft((int)button.size.x);
 
@@ -286,9 +292,8 @@ class MaskFolder extends MaskClickable
         MaskFolder folder = folders.get(i);
         folder.pos.x = itemPos.x;
         folder.pos.y = itemPos.y;
-        itemPos.y += folder.size.y;
+        itemPos.y += folder.CalculateSize();
         folder.Show(offset);
-        
       }
 
       for (int i = 0; i < conversations.size(); i++)
@@ -308,6 +313,7 @@ class MaskFolder extends MaskClickable
 
   void Update()
   {
+    size.x = mask.width-pos.x;
     super.Update();
     if (open)
     {
@@ -365,6 +371,9 @@ class MaskConversation extends MaskClickable
     super(_x, _y, _w, _h, _mask, _owner);
     connectedWorkspace = ws;
     name = ws.workspaceName;
+    ws.connectedConversation = this;
+    SetItemColor(globals.MaskConversationColor);
+    SetItemHeldColor(globals.MaskConversationHeldColor);
   }
   
   void Show(int offset)
@@ -377,6 +386,7 @@ class MaskConversation extends MaskClickable
   void Update()
   {
    super.Update();
+   size.x = mask.width-pos.x;
    if(Released())
    {
     currentWorkspace = connectedWorkspace; 

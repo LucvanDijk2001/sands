@@ -16,6 +16,8 @@ class Globals
   color HUDItemColor = color(140,20,40);
   color HUDItemDentColor = color(140,30,55);
   color HUDItemHeldColor = color(140,5,30);
+  color MaskConversationColor = color(140,30,70);
+  color MaskConversationHeldColor = color(140,25,50);
   color HUDStroke = color(140,5,20);
   color HUDHoverStroke = color(160,20,220);
   color HUDTextColor = color(160,10,240);

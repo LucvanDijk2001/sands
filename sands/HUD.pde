@@ -13,8 +13,6 @@ class HUD
   HUDHDivider conversationDivider;
 
   HUDMenu nodeMenu;///NODEMENU============================
-  HUDButton workspace1Button;
-  HUDButton workspace2Button;
 
   HUDMenu debugMenu;///DEBUGMENU==========================
   HUDButton spawnNodeButton;
@@ -53,8 +51,6 @@ class HUD
     conversationDivider = conversationMenu.AddHUDHDivider(470);
 
     //================================Nodemenu=============================================
-    workspace1Button = nodeMenu.AddHUDButton(10, 100, 100, 50, "Workspace 1");
-    workspace2Button = nodeMenu.AddHUDButton(10, 225, 100, 50, "Workspace 2");
 
     //================================Debugmenu============================================
     spawnNodeButton          = debugMenu.AddHUDButton(0, dmenuh-50, (int)debugMenu.size.x/2, 30, "Spawn node");
@@ -96,26 +92,20 @@ class HUD
 
   void NodeMenu()
   {
-    if (workspace1Button.Pressed())
-    {
-      ChangeWorkspace(0);
-    }
-    if (workspace2Button.Pressed())
-    {
-      ChangeWorkspace(1);
-    }
+
   }
 
   void DebugMenu()
   {
     //live hud items
-    debugMenu.ShowText(10, 10, "workspacesition x: " + round(currentWorkspace.windowPos.x * -1),color(30,220,240));
-    debugMenu.ShowText(10, 25, "workspace position y: " + round(currentWorkspace.windowPos.y * -1),color(30,220,240));
-    debugMenu.ShowText(10, 50, "workspace zoom: " + nf(currentWorkspace.zoom, 0, 1),color(30,220,240));
-    debugMenu.ShowText(10, 65, "Nodes in workspace: " + currentWorkspace.nodes.size(),color(30,220,240));
+    debugMenu.ShowText(10, 10, "workspace: " + currentWorkspace.workspaceName,color(30,220,240));
+    debugMenu.ShowText(10, 25, "workspacesition x: " + round(currentWorkspace.windowPos.x * -1),color(30,220,240));
+    debugMenu.ShowText(10, 50, "workspace position y: " + round(currentWorkspace.windowPos.y * -1),color(30,220,240));
+    debugMenu.ShowText(10, 65, "workspace zoom: " + nf(currentWorkspace.zoom, 0, 1),color(30,220,240));
+    debugMenu.ShowText(10, 80, "Nodes in workspace: " + currentWorkspace.nodes.size(),color(30,220,240));
     
-    debugMenu.ShowText(10, 85, "Folder amount: " + folders.size(), color(70, 200, 200));
-    debugMenu.ShowText(10, 100, "Workspace amount: " + workspaces.size(), color(70, 200, 200));
+    debugMenu.ShowText(10, 100, "Folder amount: " + folders.size(), color(70, 200, 200));
+    debugMenu.ShowText(10, 115, "Workspace amount: " + workspaces.size(), color(70, 200, 200));
 
     debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-55), "Background drawCalls: " + currentWorkspace.bgDrawCalls, color(30, 200, 200));
     debugMenu.ShowText(10, int(debugMenu.size.y-debugMenu.barMargin-40), "FPS: " + frameRate, color(30, 200, 200));

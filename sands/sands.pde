@@ -55,6 +55,12 @@ void MakeDefaultProject()
   }
   workspaces.add(new Workspace("workspace1", nestedFolder2));
   workspaces.add(new Workspace("workspace2", defaultFolder));
+  workspaces.add(new Workspace("workspace3", nestedFolder));
+  workspaces.add(new Workspace("workspace4", nestedFolder));
+  workspaces.add(new Workspace("workspace5", nestedFolder));
+  workspaces.add(new Workspace("workspace6", folders.get(2)));
+  workspaces.add(new Workspace("workspace7", folders.get(2)));
+  workspaces.add(new Workspace("workspace8", folders.get(2)));
   currentWorkspace = workspaces.get(0);
 }
 

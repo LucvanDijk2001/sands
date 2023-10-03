@@ -4,6 +4,7 @@ class Workspace
   float zoom = 1;
   String workspaceName = "workspace";
   WorkspaceFolder owner;
+  MaskConversation connectedConversation;
   PVector windowPos= new PVector(0, 0);
   int gridsize = 20;
 
