@@ -255,6 +255,9 @@ class MaskVFolderLayout extends MaskGraphic
 
   void Show(int offset)
   {
+    mask.colorMode(HSB);
+    mask.fill(140,80,25);
+    mask.rect(pos.x,pos.y+offset,owner.size.x,items.get(items.size()-1).pos.y-pos.y+items.get(items.size()-1).CalculateSize());
     for (int i = 0; i < items.size(); i++)
     {
       if (items.get(i) != owner.currentInteractedFolder)
