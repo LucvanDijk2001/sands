@@ -433,11 +433,17 @@ class MaskFolder extends MaskClickable
     {
       for (int i = 0; i < folders.size(); i++)
       {
-        totalY += folders.get(i).CalculateSize();
+        if (folders.get(i) != owner.currentInteractedFolder)
+        {
+          totalY += folders.get(i).CalculateSize();
+        }
       }
       for (int i = 0; i < conversations.size(); i++)
       {
-        totalY += conversations.get(i).size.y;
+        if (conversations.get(i) != owner.currentInteractedConversation)
+        {
+          totalY += conversations.get(i).size.y;
+        }
       }
     }
     return totalY;
