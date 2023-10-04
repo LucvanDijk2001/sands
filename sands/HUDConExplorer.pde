@@ -256,8 +256,13 @@ class MaskVFolderLayout extends MaskGraphic
   void Show(int offset)
   {
     mask.colorMode(HSB);
+    mask.noStroke();
     mask.fill(140,80,25);
+    if(items.size() == 1 && items.get(0).open || items.size() > 1)
+    {
     mask.rect(pos.x,pos.y+offset,owner.size.x,items.get(items.size()-1).pos.y-pos.y+items.get(items.size()-1).CalculateSize());
+    }
+
     for (int i = 0; i < items.size(); i++)
     {
       if (items.get(i) != owner.currentInteractedFolder)
@@ -337,7 +342,7 @@ class MaskFolder extends MaskClickable
     if (open)
     {
       mask.stroke(globals.NodeBarColor);
-      mask.line(pos.x+1,pos.y+size.y,pos.x+1,pos.y+CalculateSize());
+      mask.line(pos.x+1,pos.y+size.y+offset,pos.x+1,pos.y+CalculateSize()+offset);
       PVector itemPos = new PVector(pos.x+20, pos.y+size.y);
       for (int i = 0; i < folders.size(); i++)
       {
