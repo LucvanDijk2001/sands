@@ -21,6 +21,8 @@ class HUDConExplorer extends HUDItem
   boolean onWindow = false;
   boolean onExplorer = false;
   int explorerBarHeight = 30;
+  MaskFolder recentInteractedFolder;
+  MaskConversation recentInteractedConversation;
 
   //explorer bar
   HUDButton addFolderButton;
@@ -255,7 +257,20 @@ class MaskVFolderLayout extends MaskGraphic
   {
     for (int i = 0; i < items.size(); i++)
     {
-      items.get(i).Show(offset);
+      if (items.get(i) != owner.recentInteractedFolder)
+      {
+        items.get(i).Show(offset);
+      }
+    }
+
+    if (owner.recentInteractedFolder != null)
+    {
+      owner.recentInteractedFolder.Show(offset);
+    }
+
+    if (owner.recentInteractedConversation != null)
+    {
+      owner.recentInteractedConversation.Show(offset);
     }
   }
 
@@ -265,8 +280,11 @@ class MaskVFolderLayout extends MaskGraphic
     for (int i = 0; i < items.size(); i++)
     {
       items.get(i).Update();
-      items.get(i).pos.x = pos.x;
-      items.get(i).pos.y = pos.y + newPos;
+      if (!items.get(i).held)
+      {
+        items.get(i).pos.x = pos.x;
+        items.get(i).pos.y = pos.y + newPos;
+      }
       newPos += items.get(i).CalculateSize();
     }
     size.y = newPos;
@@ -287,6 +305,8 @@ class MaskFolder extends MaskClickable
   String folderName = "folder";
   int sizeY = 0;
   boolean open = false;
+  boolean held = false;
+  PVector pressedMouseOffset = new PVector(0, 0);
 
   MaskFolder(int _x, int _y, int _w, int _h, WorkspaceFolder _folder, PGraphics _mask, HUDConExplorer _owner)
   {
@@ -313,19 +333,31 @@ class MaskFolder extends MaskClickable
       for (int i = 0; i < folders.size(); i++)
       {
         MaskFolder folder = folders.get(i);
-        folder.pos.x = itemPos.x;
-        folder.pos.y = itemPos.y;
+        if (!folder.held)
+        {
+          folder.pos.x = itemPos.x;
+          folder.pos.y = itemPos.y;
+        }
         itemPos.y += folder.CalculateSize();
-        folder.Show(offset);
+        if (folder != owner.recentInteractedFolder)
+        {
+          folder.Show(offset);
+        }
       }
 
       for (int i = 0; i < conversations.size(); i++)
       {
         MaskConversation conversation = conversations.get(i);
-        conversation.pos.x = itemPos.x;
-        conversation.pos.y = itemPos.y;
+        if (!conversation.held)
+        {
+          conversation.pos.x = itemPos.x;
+          conversation.pos.y = itemPos.y;
+        }
         itemPos.y += conversation.size.y;
-        conversation.Show(offset);
+        if (conversation != owner.recentInteractedConversation)
+        {
+          conversation.Show(offset);
+        }
       }
     }
     mask.textAlign(LEFT, CENTER);
@@ -339,10 +371,9 @@ class MaskFolder extends MaskClickable
     if (owner.onExplorer)
     {
       super.Update();
-    }
-    else
+    } else
     {
-     hover = false; 
+      hover = false;
     }
     if (open)
     {
@@ -355,6 +386,22 @@ class MaskFolder extends MaskClickable
       {
         conversations.get(i).Update();
       }
+    }
+    
+    if (Pressed())
+    {
+      pressedMouseOffset = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      pressedMouseOffset.x -= pos.x;
+      pressedMouseOffset.y -= pos.y;
+      owner.recentInteractedFolder = this;
+    }
+    
+    held = Held();
+    if (held)
+    {
+      PVector mp = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      pos.x = mp.x - pressedMouseOffset.x;
+      pos.y = mp.y - pressedMouseOffset.y;
     }
     open = button.toggled;
     button.Update();
@@ -394,10 +441,9 @@ class MaskFolderButton extends MaskToggable
     if (owner.onExplorer)
     {
       super.Update();
-    }
-    else
+    } else
     {
-     hover = false; 
+      hover = false;
     }
   }
 }
@@ -406,6 +452,8 @@ class MaskConversation extends MaskClickable
 {
   Workspace connectedWorkspace;
   String name = "ws";
+  boolean held = false;
+  PVector pressedMouseOffset = new PVector(0, 0);
 
   MaskConversation (int _x, int _y, int _w, int _h, Workspace ws, PGraphics _mask, HUDConExplorer _owner)
   {
@@ -429,15 +477,28 @@ class MaskConversation extends MaskClickable
     if (owner.onExplorer)
     {
       super.Update();
-    }
-    else
+    } else
     {
-     hover = false; 
+      hover = false;
     }
     size.x = mask.width-pos.x;
     if (Released())
     {
       currentWorkspace = connectedWorkspace;
+    }
+    held = Held();
+    if (Pressed())
+    {
+      pressedMouseOffset = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      pressedMouseOffset.x -= pos.x;
+      pressedMouseOffset.y -= pos.y;
+      owner.recentInteractedConversation = this;
+    }
+    if (held)
+    {
+      PVector mp = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      pos.x = mp.x - pressedMouseOffset.x;
+      pos.y = mp.y - pressedMouseOffset.y;
     }
   }
 }
