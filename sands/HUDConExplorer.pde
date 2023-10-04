@@ -21,8 +21,8 @@ class HUDConExplorer extends HUDItem
   boolean onWindow = false;
   boolean onExplorer = false;
   int explorerBarHeight = 30;
-  MaskFolder recentInteractedFolder;
-  MaskConversation recentInteractedConversation;
+  MaskFolder currentInteractedFolder;
+  MaskConversation currentInteractedConversation;
 
   //explorer bar
   HUDButton addFolderButton;
@@ -66,7 +66,7 @@ class HUDConExplorer extends HUDItem
 
     for (int i = 0; i < folders.size(); i++)
     {
-      MaskFolder folder = new MaskFolder(0, 100+i*100, 100, 20, folders.get(i), mask, this);
+      MaskFolder folder = new MaskFolder(0, 100+i*100, 100, 20, folders.get(i), null, mask, this);
       RecurseCreateFolder(folders.get(i), folder);
       layout.AddItem(folder);
     }
@@ -82,7 +82,7 @@ class HUDConExplorer extends HUDItem
     {
       for (int i = 0; i < folder.folders.size(); i++)
       {
-        MaskFolder newMaskFolder = new MaskFolder(0, 0, 100, 20, folder.folders.get(i), mask, this);
+        MaskFolder newMaskFolder = new MaskFolder(0, 0, 100, 20, folder.folders.get(i), maskFolder, mask, this);
         maskFolder.folders.add(newMaskFolder);
         RecurseCreateFolder(folder.folders.get(i), newMaskFolder);
       }
@@ -117,14 +117,14 @@ class HUDConExplorer extends HUDItem
     if (addFolderButton.Released())
     {
       WorkspaceFolder newFolder = new WorkspaceFolder("folder" + folders.size());
-      layout.AddItem(new MaskFolder(0, 0, 100, 20, newFolder, mask, this));
+      layout.AddItem(new MaskFolder(0, 0, 100, 20, newFolder, null, mask, this));
       folders.add(newFolder);
     }
 
     if (addConversationButton.Released())
     {
       Workspace newWorkspace = new Workspace("workspace" + workspaces.size(), folders.get(folders.size()-1));
-      MaskConversation mc = new MaskConversation(0, 0, 100, 20, newWorkspace, mask, this);
+      MaskConversation mc = new MaskConversation(0, 0, 100, 20, newWorkspace, folders.get(folders.size()-1).connectedFolder, mask, this);
       folders.get(folders.size()-1).connectedFolder.conversations.add(mc);
       workspaces.add(newWorkspace);
     }
@@ -257,20 +257,20 @@ class MaskVFolderLayout extends MaskGraphic
   {
     for (int i = 0; i < items.size(); i++)
     {
-      if (items.get(i) != owner.recentInteractedFolder)
+      if (items.get(i) != owner.currentInteractedFolder)
       {
         items.get(i).Show(offset);
       }
     }
 
-    if (owner.recentInteractedFolder != null)
+    if (owner.currentInteractedFolder != null)
     {
-      owner.recentInteractedFolder.Show(offset);
+      owner.currentInteractedFolder.Show(offset);
     }
 
-    if (owner.recentInteractedConversation != null)
+    if (owner.currentInteractedConversation != null)
     {
-      owner.recentInteractedConversation.Show(offset);
+      owner.currentInteractedConversation.Show(offset);
     }
   }
 
@@ -284,8 +284,8 @@ class MaskVFolderLayout extends MaskGraphic
       {
         items.get(i).pos.x = pos.x;
         items.get(i).pos.y = pos.y + newPos;
+        newPos += items.get(i).CalculateSize();
       }
-      newPos += items.get(i).CalculateSize();
     }
     size.y = newPos;
   }
@@ -300,6 +300,7 @@ class MaskFolder extends MaskClickable
 {
   WorkspaceFolder connectedFolder;
   MaskFolderButton button;
+  MaskFolder parent = null;
   ArrayList<MaskFolder> folders = new ArrayList<MaskFolder>();
   ArrayList<MaskConversation> conversations = new ArrayList<MaskConversation>();
   String folderName = "folder";
@@ -308,10 +309,11 @@ class MaskFolder extends MaskClickable
   boolean held = false;
   PVector pressedMouseOffset = new PVector(0, 0);
 
-  MaskFolder(int _x, int _y, int _w, int _h, WorkspaceFolder _folder, PGraphics _mask, HUDConExplorer _owner)
+  MaskFolder(int _x, int _y, int _w, int _h, WorkspaceFolder _folder, MaskFolder _parent, PGraphics _mask, HUDConExplorer _owner)
   {
     super(_x, _y, _w, _h, _mask, _owner); 
     SetHoverEnabled(false);
+    parent = _parent;
     connectedFolder = _folder;
     folderName = _folder.folderName;
     _folder.connectedFolder = this;
@@ -320,7 +322,7 @@ class MaskFolder extends MaskClickable
 
     for (int i = 0; i < connectedFolder.workspaces.size(); i++)
     {
-      conversations.add(new MaskConversation(0, 0, 100, 20, connectedFolder.workspaces.get(i), mask, owner));
+      conversations.add(new MaskConversation(0, 0, 100, 20, connectedFolder.workspaces.get(i), this, mask, owner));
     }
   }
 
@@ -337,9 +339,10 @@ class MaskFolder extends MaskClickable
         {
           folder.pos.x = itemPos.x;
           folder.pos.y = itemPos.y;
+          itemPos.y += folder.CalculateSize();
         }
-        itemPos.y += folder.CalculateSize();
-        if (folder != owner.recentInteractedFolder)
+
+        if (folder != owner.currentInteractedFolder)
         {
           folder.Show(offset);
         }
@@ -352,9 +355,10 @@ class MaskFolder extends MaskClickable
         {
           conversation.pos.x = itemPos.x;
           conversation.pos.y = itemPos.y;
+          itemPos.y += conversation.size.y;
         }
-        itemPos.y += conversation.size.y;
-        if (conversation != owner.recentInteractedConversation)
+
+        if (conversation != owner.currentInteractedConversation)
         {
           conversation.Show(offset);
         }
@@ -387,15 +391,16 @@ class MaskFolder extends MaskClickable
         conversations.get(i).Update();
       }
     }
-    
+
     if (Pressed())
     {
       pressedMouseOffset = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
       pressedMouseOffset.x -= pos.x;
       pressedMouseOffset.y -= pos.y;
-      owner.recentInteractedFolder = this;
+      owner.currentInteractedFolder = this;
+      open = false;
     }
-    
+
     held = Held();
     if (held)
     {
@@ -403,8 +408,20 @@ class MaskFolder extends MaskClickable
       pos.x = mp.x - pressedMouseOffset.x;
       pos.y = mp.y - pressedMouseOffset.y;
     }
-    open = button.toggled;
-    button.Update();
+
+    if (Released())
+    {
+      if (owner.currentInteractedFolder == this)
+      {
+        owner.currentInteractedFolder = null;
+      }
+    }
+
+    if (!held)
+    {
+      open = button.toggled;
+      button.Update();
+    }
     button.pos.x = pos.x;
     button.pos.y = pos.y;
   }
@@ -451,13 +468,15 @@ class MaskFolderButton extends MaskToggable
 class MaskConversation extends MaskClickable
 {
   Workspace connectedWorkspace;
+  MaskFolder connectedFolder;
   String name = "ws";
   boolean held = false;
   PVector pressedMouseOffset = new PVector(0, 0);
 
-  MaskConversation (int _x, int _y, int _w, int _h, Workspace ws, PGraphics _mask, HUDConExplorer _owner)
+  MaskConversation (int _x, int _y, int _w, int _h, Workspace ws, MaskFolder _connectedFolder, PGraphics _mask, HUDConExplorer _owner)
   {
     super(_x, _y, _w, _h, _mask, _owner);
+    connectedFolder = _connectedFolder;
     connectedWorkspace = ws;
     name = ws.workspaceName;
     ws.connectedConversation = this;
@@ -485,6 +504,11 @@ class MaskConversation extends MaskClickable
     if (Released())
     {
       currentWorkspace = connectedWorkspace;
+
+      if (owner.currentInteractedConversation == this)
+      {
+        owner.currentInteractedConversation = null;
+      }
     }
     held = Held();
     if (Pressed())
@@ -492,7 +516,7 @@ class MaskConversation extends MaskClickable
       pressedMouseOffset = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
       pressedMouseOffset.x -= pos.x;
       pressedMouseOffset.y -= pos.y;
-      owner.recentInteractedConversation = this;
+      owner.currentInteractedConversation = this;
     }
     if (held)
     {
