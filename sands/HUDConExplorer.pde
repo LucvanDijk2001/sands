@@ -336,6 +336,8 @@ class MaskFolder extends MaskClickable
     super.Show(offset);
     if (open)
     {
+      mask.stroke(globals.NodeBarColor);
+      mask.line(pos.x+1,pos.y+size.y,pos.x+1,pos.y+CalculateSize());
       PVector itemPos = new PVector(pos.x+20, pos.y+size.y);
       for (int i = 0; i < folders.size(); i++)
       {

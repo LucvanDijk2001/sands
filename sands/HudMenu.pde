@@ -47,6 +47,12 @@ class HUDMenu
     {
       text(title, pos.x+10, pos.y+barMargin/2);
     }
+    
+    for (int i = 0; i < HUDItems.size(); i++)
+    {
+      HUDItem item = HUDItems.get(i);
+      item.Show();
+    }
   }
 
   void Update()
@@ -54,7 +60,6 @@ class HUDMenu
     for (int i = 0; i < HUDItems.size(); i++)
     {
       HUDItem item = HUDItems.get(i);
-      item.Show();
       item.Update();
     }
 

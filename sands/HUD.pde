@@ -63,12 +63,24 @@ class HUD
     {
       HUDMenu currentMenu = menus.get(i);
       currentMenu.Show();
-      currentMenu.Update();
     }
 
     if (debug)
     {
       debugMenu.Show();
+    }
+  }
+
+  void Update()
+  {
+    for (int i = 0; i < menus.size(); i++)
+    {
+      HUDMenu currentMenu = menus.get(i);
+      currentMenu.Update();
+    }
+
+    if (debug)
+    {
       debugMenu.Update();
     }
 
