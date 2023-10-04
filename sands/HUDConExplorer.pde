@@ -169,7 +169,7 @@ class HUDConExplorer extends HUDItem
         areaOffset = (int)constrain(areaOffset, maxScroll, 0);
         if (areaOffset <= 0)
         {
-          slider.UpdateHandlePosition(float(areaOffset)/float(maxScroll));
+          slider.UpdateHandlePosition(float(areaOffset)/constrain(float(maxScroll),-100000,-0.01));
         }
       }
     }
