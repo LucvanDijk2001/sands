@@ -43,10 +43,11 @@ void draw()
 void MakeDefaultProject()
 {
   WorkspaceFolder defaultFolder = new WorkspaceFolder("default");
-  WorkspaceFolder defaultFolder2 = new WorkspaceFolder("default");
+  WorkspaceFolder defaultFolder2 = new WorkspaceFolder("defaultNested");
   defaultFolder.folders.add(defaultFolder2);
   folders.add(defaultFolder);
-  workspaces.add(new Workspace("workspace1", defaultFolder));
+  workspaces.add(new Workspace("workspace0", defaultFolder));
+  workspaces.add(new Workspace("workspace1", defaultFolder2));
   currentWorkspace = workspaces.get(0);
 }
 

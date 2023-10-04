@@ -280,7 +280,7 @@ class MaskVFolderLayout extends MaskGraphic
     for (int i = 0; i < items.size(); i++)
     {
       items.get(i).Update();
-      if (!items.get(i).held)
+      if (!items.get(i).drag)
       {
         items.get(i).pos.x = pos.x;
         items.get(i).pos.y = pos.y + newPos;
@@ -309,6 +309,7 @@ class MaskFolder extends MaskClickable
   boolean drag = false;
   PVector pressedMouseOffset = new PVector(0, 0);
   PVector pressedMouseStart = new PVector(0, 0);
+  int startAreaOffset = 0;
 
   MaskFolder(int _x, int _y, int _w, int _h, WorkspaceFolder _folder, MaskFolder _parent, PGraphics _mask, HUDConExplorer _owner)
   {
@@ -397,6 +398,7 @@ class MaskFolder extends MaskClickable
     {
       pressedMouseOffset = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
       pressedMouseStart = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      startAreaOffset = owner.areaOffset;
       pressedMouseOffset.x -= pos.x;
       pressedMouseOffset.y -= pos.y;
       owner.currentInteractedFolder = this;
@@ -404,9 +406,9 @@ class MaskFolder extends MaskClickable
 
     if (drag)
     {
-      PVector mp = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      PVector mp = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight+owner.areaOffset));
       pos.x = mp.x - pressedMouseOffset.x;
-      pos.y = mp.y - pressedMouseOffset.y;
+      pos.y = mp.y - pressedMouseOffset.y  + owner.areaOffset - (owner.areaOffset-startAreaOffset);
     }
 
     if (Released())
@@ -449,14 +451,14 @@ class MaskFolder extends MaskClickable
     {
       for (int i = 0; i < folders.size(); i++)
       {
-        if (folders.get(i) != owner.currentInteractedFolder)
+        if (!folders.get(i).drag)
         {
           totalY += folders.get(i).CalculateSize();
         }
       }
       for (int i = 0; i < conversations.size(); i++)
       {
-        if (conversations.get(i) != owner.currentInteractedConversation)
+        if (!conversations.get(i).drag)
         {
           totalY += conversations.get(i).size.y;
         }
@@ -495,6 +497,7 @@ class MaskConversation extends MaskClickable
   boolean drag = false;
   PVector pressedMouseOffset = new PVector(0, 0);
   PVector pressedMouseStart = new PVector(0, 0);
+  int startAreaOffset = 0;
 
   MaskConversation (int _x, int _y, int _w, int _h, Workspace ws, MaskFolder _connectedFolder, PGraphics _mask, HUDConExplorer _owner)
   {
@@ -544,6 +547,7 @@ class MaskConversation extends MaskClickable
     {
       pressedMouseOffset = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
       pressedMouseStart = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      startAreaOffset = owner.areaOffset;
       pressedMouseOffset.x -= pos.x;
       pressedMouseOffset.y -= pos.y;
     }
@@ -560,9 +564,9 @@ class MaskConversation extends MaskClickable
 
     if (drag)
     {
-      PVector mp = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight));
+      PVector mp = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight+owner.areaOffset));
       pos.x = mp.x - pressedMouseOffset.x;
-      pos.y = mp.y - pressedMouseOffset.y;
+      pos.y = mp.y - pressedMouseOffset.y  + owner.areaOffset - (owner.areaOffset-startAreaOffset);
     }
   }
 }
