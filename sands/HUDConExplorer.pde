@@ -30,6 +30,8 @@ class HUDConExplorer extends HUDItem
   int explorerBarHeight = 30;
   MaskFolder currentInteractedFolder;
   MaskConversation currentInteractedConversation;
+  ArrayList<MaskFolder> allFolders = new ArrayList<MaskFolder>();
+  ArrayList<MaskConversation> allConversations = new ArrayList<MaskConversation>();
 
   //explorer bar
   HUDButton addFolderButton;
@@ -268,7 +270,7 @@ class MaskVFolderLayout extends MaskGraphic
     if (items.size() == 1 && items.get(0).open || items.size() > 1)
     {
       int mini = 1;
-      if(items.get(items.size()-mini).drag && items.size() > 1)
+      if (items.get(items.size()-mini).drag && items.size() > 1)
       {
         mini++;
       }
@@ -300,11 +302,14 @@ class MaskVFolderLayout extends MaskGraphic
     for (int i = 0; i < items.size(); i++)
     {
       items.get(i).Update();
-      if (!items.get(i).drag)
+      if (i < items.size())
       {
-        items.get(i).pos.x = pos.x;
-        items.get(i).pos.y = pos.y + newPos;
-        newPos += items.get(i).CalculateSize();
+        if (!items.get(i).drag)
+        {
+          items.get(i).pos.x = pos.x;
+          items.get(i).pos.y = pos.y + newPos;
+          newPos += items.get(i).CalculateSize();
+        }
       }
     }
     size.y = newPos;
@@ -346,6 +351,8 @@ class MaskFolder extends MaskClickable
     {
       conversations.add(new MaskConversation(0, 0, 100, 20, connectedFolder.workspaces.get(i), this, mask, owner));
     }
+
+    owner.allFolders.add(this);
   }
 
   void Show(int offset)
@@ -395,29 +402,10 @@ class MaskFolder extends MaskClickable
 
   void Update()
   {
-    if (owner.currentInteractedFolder != null)
-    {
-      if (owner.currentInteractedFolder.drag)
-      {
-        SetHoverEnabled(true);
-      }
-    } else if (owner.currentInteractedConversation != null)
-    {
-      if (owner.currentInteractedConversation.drag)
-      {
-        SetHoverEnabled(true);
-      }
-    } else
-    {
-      SetHoverEnabled(false);
-    }
-    
-    if(drag)
-    {
-      SetHoverEnabled(false);
-    }
+    CheckEnableHover();
 
     size.x = mask.width-pos.x;
+    
     if (owner.onExplorer)
     {
       super.Update();
@@ -425,6 +413,7 @@ class MaskFolder extends MaskClickable
     {
       hover = false;
     }
+
     if (open)
     {
       for (int i = 0; i < folders.size(); i++)
@@ -459,6 +448,100 @@ class MaskFolder extends MaskClickable
     {      
       if (drag)
       {
+        MaskFolder hoveredFolder = null;
+        MaskConversation hoveredConversation = null;
+
+        for (int i = 0; i < owner.allFolders.size(); i++)
+        {
+          if (owner.allFolders.get(i).hover && owner.allFolders.get(i) != this)
+          {
+            hoveredFolder = owner.allFolders.get(i);
+            break;
+          }
+        }
+
+        for (int i = 0; i < owner.allConversations.size(); i++)
+        {
+          if (owner.allConversations.get(i).hover)
+          {
+            hoveredConversation = owner.allConversations.get(i);
+          }
+        }
+
+        if (parent == null)
+        {
+          if (owner.layout.items.size() > 1)
+          {
+            if (hoveredFolder != null)
+            {
+              parent = hoveredFolder;
+              parent.folders.add(this);
+              for (int i = 0; i < owner.layout.items.size(); i++)
+              {
+                if (owner.layout.items.get(i) == this)
+                {
+                  owner.layout.items.remove(i);
+                  break;
+                }
+              }
+            }
+
+            if (hoveredConversation != null)
+            {
+              parent = hoveredConversation.connectedFolder;
+              hoveredConversation.connectedFolder.folders.add(this);
+              for (int i = 0; i < owner.layout.items.size(); i++)
+              {
+                if (owner.layout.items.get(i) == this)
+                {
+                  owner.layout.items.remove(i);
+                  break;
+                }
+              }
+            }
+          }
+        } else
+        {
+          if(hoveredFolder != null)
+          {
+            
+          }
+          else if (hoveredConversation != null)
+          {
+            
+          }
+          else
+          {
+            
+          }
+        }
+        //TEMP print all drag data
+        print("moved folder: " + this.folderName + "\n");
+        if (hoveredFolder != null) {
+          print("hovered folder: " + hoveredFolder.folderName + "\n");
+        } else {
+          print("hovered folder: " + hoveredFolder + "\n");
+        }
+        if (hoveredConversation != null) {
+          print("hovered conversation: " + hoveredConversation.name + "\n");
+        } else {
+          print("hovered conversation: " + hoveredConversation + "\n");
+        }
+        println();
+
+        for (int i = 0; i < owner.allFolders.size(); i++)
+        {
+          print(owner.allFolders.get(i).folderName+"\n");
+        }
+        println();
+        for (int i = 0; i < owner.allConversations.size(); i++)
+        {
+          print(owner.allConversations.get(i).name+"\n");
+        }
+        println();
+        println();
+        //ENDTEMP print all drag data
+
         drag = false;
       }
       if (owner.currentInteractedFolder == this)
@@ -488,6 +571,31 @@ class MaskFolder extends MaskClickable
     }
     button.pos.x = pos.x;
     button.pos.y = pos.y;
+  }
+
+  void CheckEnableHover()
+  {
+    if (owner.currentInteractedFolder != null)
+    {
+      if (owner.currentInteractedFolder.drag)
+      {
+        SetHoverEnabled(true);
+      }
+    } else if (owner.currentInteractedConversation != null)
+    {
+      if (owner.currentInteractedConversation.drag)
+      {
+        SetHoverEnabled(true);
+      }
+    } else
+    {
+      SetHoverEnabled(false);
+    }
+
+    if (drag)
+    {
+      SetHoverEnabled(false);
+    }
   }
 
   int CalculateSize()
@@ -554,6 +662,7 @@ class MaskConversation extends MaskClickable
     ws.connectedConversation = this;
     SetItemColor(globals.MaskConversationColor);
     SetItemHeldColor(globals.MaskConversationHeldColor);
+    owner.allConversations.add(this);
   }
 
   void Show(int offset)

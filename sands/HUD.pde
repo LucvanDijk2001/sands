@@ -126,10 +126,7 @@ class HUD
 
     if (spawnNodeButton.Released())
     {
-      for(int i = 0; i < 50; i++)
-      {
-      currentWorkspace.AddNode((int)random(-3000,3000), (int)random(-3000,3000), 200, 100, 20);
-      }
+      currentWorkspace.AddNode((int)random(-100,100), (int)random(-100,100), 200, 100, 20);
     }
 
     if (printFileStructureButton.Released())
