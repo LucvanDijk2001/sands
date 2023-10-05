@@ -3,7 +3,6 @@ Globals globals;
 HUD hud;
 Workspace currentWorkspace;
 boolean debug = false;
-int u = 0;
 
 //project structure
 ArrayList<Workspace> workspaces = new ArrayList<Workspace>();
