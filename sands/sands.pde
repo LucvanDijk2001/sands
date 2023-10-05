@@ -49,12 +49,21 @@ void MakeDefaultProject()
   WorkspaceFolder defaultFolder4 = new WorkspaceFolder("defaultNested");
   WorkspaceFolder defaultFolder5 = new WorkspaceFolder("defaultNested");
   WorkspaceFolder defaultFolder6 = new WorkspaceFolder("defaultNested");
+  WorkspaceFolder defaultFolder7 = new WorkspaceFolder("default2");
+  WorkspaceFolder defaultFolder8 = new WorkspaceFolder("defaultNested");
+  WorkspaceFolder defaultFolder9 = new WorkspaceFolder("defaultNested");
+  WorkspaceFolder defaultFolder10 = new WorkspaceFolder("defaultNested");
   defaultFolder.folders.add(defaultFolder2);
   defaultFolder2.folders.add(defaultFolder3);
   defaultFolder3.folders.add(defaultFolder4);
   defaultFolder4.folders.add(defaultFolder5);
   defaultFolder5.folders.add(defaultFolder6);
+  defaultFolder7.folders.add(defaultFolder8);
+  defaultFolder8.folders.add(defaultFolder9);
+  defaultFolder9.folders.add(defaultFolder10);
+  
   folders.add(defaultFolder);
+  folders.add(defaultFolder7);
   workspaces.add(new Workspace("workspace0", defaultFolder));
   workspaces.add(new Workspace("workspace1", defaultFolder2));
   workspaces.add(new Workspace("workspace2", defaultFolder3));
@@ -64,6 +73,14 @@ void MakeDefaultProject()
   workspaces.add(new Workspace("workspace6", defaultFolder6));
   workspaces.add(new Workspace("workspace7", defaultFolder6));
   workspaces.add(new Workspace("workspace8", defaultFolder6));
+  workspaces.add(new Workspace("workspace9", defaultFolder7));
+  workspaces.add(new Workspace("workspace10", defaultFolder8));
+  workspaces.add(new Workspace("workspace11", defaultFolder9));
+  workspaces.add(new Workspace("workspace12", defaultFolder9));
+  workspaces.add(new Workspace("workspace13", defaultFolder10));
+  workspaces.add(new Workspace("workspace14", defaultFolder10));
+  workspaces.add(new Workspace("workspace15", defaultFolder10));
+  workspaces.add(new Workspace("workspace16", defaultFolder10));
   currentWorkspace = workspaces.get(0);
 }
 

@@ -19,9 +19,9 @@ class Workspace
     workspaceName = name;
     owner.AddWorkspace(this);
     nodes = new ArrayList<Node>();
-    AddNode(0, 0, 200, 100, 20);
-    AddNode(0, 0, 200, 60, 20);
-    AddNode(0, 0, 240, 200, 20);
+    AddNode((int)random(-300,300), (int)random(-300,300), 200, 100, 20);
+    AddNode((int)random(-300,300), (int)random(-300,300), 200, 60, 20);
+    AddNode((int)random(-300,300), (int)random(-300,300), 240, 200, 20);
   }
 
   //========================================MAIN==============================//

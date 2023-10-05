@@ -15,6 +15,13 @@ class HUDConExplorer extends HUDItem
   //make folder object
   //make folder item object
 
+  //when drag, check what item is hovered, when let go, for drag item get owner, removearrayid thing for owner.folder/conversation, check which item is hovered, get owner folder, add to that structure
+  //should probably turn go to workspace into double click
+  //single click selects an item and allows you to delete it or rename it
+  //deleting will save a deleteundoaction with the deleted item, it literally saves the item, undoing the action will use that item to add it back to it's parent through that item.
+  //deleting an item is done by selecting an item and pressing delete
+  //renaming an item is done by selecting an item and pressing enter, pressing enter again will end the renaming.
+
   //==================================================DATA================================
   //explorer window
   PVector size = new PVector(0, 0);
@@ -169,7 +176,7 @@ class HUDConExplorer extends HUDItem
         areaOffset = (int)constrain(areaOffset, maxScroll, 0);
         if (areaOffset <= 0)
         {
-          slider.UpdateHandlePosition(float(areaOffset)/constrain(float(maxScroll),-100000,-0.01));
+          slider.UpdateHandlePosition(float(areaOffset)/constrain(float(maxScroll), -100000, -0.01));
         }
       }
     }
@@ -257,10 +264,15 @@ class MaskVFolderLayout extends MaskGraphic
   {
     mask.colorMode(HSB);
     mask.noStroke();
-    mask.fill(140,80,25);
-    if(items.size() == 1 && items.get(0).open || items.size() > 1)
+    mask.fill(140, 80, 25);
+    if (items.size() == 1 && items.get(0).open || items.size() > 1)
     {
-    mask.rect(pos.x,pos.y+offset,owner.size.x,items.get(items.size()-1).pos.y-pos.y+items.get(items.size()-1).CalculateSize());
+      int mini = 1;
+      if(items.get(items.size()-mini).drag && items.size() > 1)
+      {
+        mini++;
+      }
+      mask.rect(pos.x, pos.y+offset, owner.size.x, items.get(items.size()-mini).pos.y-pos.y+items.get(items.size()-mini).CalculateSize());
     }
 
     for (int i = 0; i < items.size(); i++)
@@ -342,7 +354,7 @@ class MaskFolder extends MaskClickable
     if (open)
     {
       mask.stroke(globals.NodeBarColor);
-      mask.line(pos.x+1,pos.y+size.y+offset,pos.x+1,pos.y+CalculateSize()+offset);
+      mask.line(pos.x+1, pos.y+size.y+offset, pos.x+1, pos.y+CalculateSize()+offset);
       PVector itemPos = new PVector(pos.x+20, pos.y+size.y);
       for (int i = 0; i < folders.size(); i++)
       {
@@ -383,6 +395,28 @@ class MaskFolder extends MaskClickable
 
   void Update()
   {
+    if (owner.currentInteractedFolder != null)
+    {
+      if (owner.currentInteractedFolder.drag)
+      {
+        SetHoverEnabled(true);
+      }
+    } else if (owner.currentInteractedConversation != null)
+    {
+      if (owner.currentInteractedConversation.drag)
+      {
+        SetHoverEnabled(true);
+      }
+    } else
+    {
+      SetHoverEnabled(false);
+    }
+    
+    if(drag)
+    {
+      SetHoverEnabled(false);
+    }
+
     size.x = mask.width-pos.x;
     if (owner.onExplorer)
     {
@@ -423,7 +457,10 @@ class MaskFolder extends MaskClickable
 
     if (Released())
     {      
-      drag = false;
+      if (drag)
+      {
+        drag = false;
+      }
       if (owner.currentInteractedFolder == this)
       {
         owner.currentInteractedFolder = null;
@@ -445,10 +482,9 @@ class MaskFolder extends MaskClickable
     {
       open = button.toggled;
       button.Update();
-    }
-    else
+    } else
     {
-      open = false; 
+      open = false;
     }
     button.pos.x = pos.x;
     button.pos.y = pos.y;
@@ -574,6 +610,7 @@ class MaskConversation extends MaskClickable
 
     if (drag)
     {
+      SetHoverEnabled(false);
       PVector mp = globals.GetMouseHudPos(-(int)(owner.pos.x+owner.sliderWidth), -(int)(owner.pos.y+owner.explorerBarHeight+owner.areaOffset));
       pos.x = mp.x - pressedMouseOffset.x;
       pos.y = mp.y - pressedMouseOffset.y  + owner.areaOffset - (owner.areaOffset-startAreaOffset);
